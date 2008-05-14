@@ -1,9 +1,16 @@
 package dmhw.servlet;
 
 import java.io.IOException;
+import java.util.LinkedList;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import dmhw.Pages;
+import dmhw.User;
+import dmhw.management.UserManager;
 
 
 /**
@@ -27,23 +34,18 @@ import javax.servlet.http.HttpServletResponse;
 				"Authentication Required",
 				"You have to log in to see your blog page",
 				"go back to login page",
-				"/jackrabbit-jcr-demo/blog/index.jsp");	
+				Pages.login);	
             return;
 		}
 		
+		User user = UserManager.getUser(username);
 		
-//		// Get a ArrayList of blog entries of user
-//		ArrayList<BlogEntry> blogList = BlogManager.getByUsername(username,session);
-//		
-//		String uuid = UserManager.getUUID(username, session);
-//		
-//		// Set the blogList as a request attribute 
-//		request.setAttribute("blogList",blogList);
-//		request.setAttribute("ownBlog",true);
-//		request.setAttribute("userUUID", uuid);
-//		
-//		// Forward the request to blog entries page
-//        RequestDispatcher requestDispatcher = this.getServletContext().getRequestDispatcher("/blog/listBlogEntries.jsp");
-//        requestDispatcher.forward(request, response);
+		LinkedList<Message> messages = MessageManager.getByUser(user);
+		
+		request.setAttribute("messages",messages);
+		
+		// Forward the request to blog entries page
+        RequestDispatcher requestDispatcher = this.getServletContext().getRequestDispatcher(Pages.showMessages);
+        requestDispatcher.forward(request, response);
 	}   	  	    
 }
