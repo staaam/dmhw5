@@ -1,16 +1,16 @@
 package dmhw.servlet;
 
 import java.io.IOException;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import dmhw.Pages;
-import dmhw.User;
-import dmhw.management.UserManager;
+import dmhw.*;
+import dmhw.model.*;
+
 
 
 /**
@@ -40,8 +40,7 @@ import dmhw.management.UserManager;
 		
 		User user = UserManager.getUser(username);
 		
-		LinkedList<Message> messages = MessageManager.getByUser(user);
-		
+		ArrayList<Message> messages = MessageManager.getByUser(user);
 		request.setAttribute("messages",messages);
 		
 		// Forward the request to blog entries page

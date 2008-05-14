@@ -1,4 +1,4 @@
-package dmhw.management;
+package dmhw.model;
 
 import dmhw.User;
 
