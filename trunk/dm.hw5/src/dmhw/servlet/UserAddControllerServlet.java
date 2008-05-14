@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import dmhw.Pages;
 import dmhw.User;
-import dmhw.UserManager;
+import dmhw.management.UserManager;
 import dmhw.Utils;
 
 

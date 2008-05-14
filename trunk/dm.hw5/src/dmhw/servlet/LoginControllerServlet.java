@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dmhw.Pages;
-import dmhw.UserManager;
+import dmhw.management.UserManager;
 
 //import org.apache.jackrabbit.demo.blog.model.UserManager;
 

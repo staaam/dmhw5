@@ -1,4 +1,6 @@
-package dmhw;
+package dmhw.management;
+
+import dmhw.User;
 
 
 public class UserManager {
@@ -16,6 +18,10 @@ public class UserManager {
 	public static void addUser(User user) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public static User getUser(String username) {
+		return new User(username, "", "type", new Integer(1));
 	}
 
 }
