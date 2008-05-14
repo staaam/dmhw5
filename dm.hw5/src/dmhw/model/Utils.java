@@ -1,4 +1,4 @@
-package dmhw;
+package dmhw.model;
 
 public class Utils {
 

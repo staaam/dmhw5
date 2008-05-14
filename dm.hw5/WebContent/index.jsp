@@ -8,6 +8,7 @@
 You're logged in as ${username}<br/>
 <a href="newuser.jsp">new user</a><br/>
 <a href="login.jsp">login</a><br/>
+<a href="boardview">board view</a><br/>
 <a href="logout">logout</a><br/>
 </body>
 </html>

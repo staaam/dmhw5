@@ -1,4 +1,4 @@
-package dmhw;
+package dmhw.model;
 
 public class Pages {
 	public static final String index = "/"; 

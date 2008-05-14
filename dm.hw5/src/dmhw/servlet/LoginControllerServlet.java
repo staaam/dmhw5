@@ -10,8 +10,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import dmhw.Pages;
-import dmhw.management.UserManager;
+import dmhw.model.*;
+
 
 //import org.apache.jackrabbit.demo.blog.model.UserManager;
 
