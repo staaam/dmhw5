@@ -1,8 +1,5 @@
 package dmhw.model;
 
-import dmhw.User;
-
-
 public class UserManager {
 
 	public static boolean login(String username, String password) {

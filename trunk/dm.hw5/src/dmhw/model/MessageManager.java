@@ -1,9 +1,6 @@
-package dmhw.servlet;
+package dmhw.model;
 
 import java.util.ArrayList;
-
-import dmhw.Message;
-import dmhw.User;
 
 public class MessageManager {
 
