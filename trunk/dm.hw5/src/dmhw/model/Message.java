@@ -1,4 +1,4 @@
-package dmhw.servlet;
+package dmhw.model;
 
 import java.util.Date;
 
