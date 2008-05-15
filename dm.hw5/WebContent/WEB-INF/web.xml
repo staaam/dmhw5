@@ -42,8 +42,11 @@
 	<display-name>
 	Apache-Axis Servlet</display-name>
 	<servlet-name>AxisServlet</servlet-name>
-	<servlet-class>
-	org.apache.axis.transport.http.AxisServlet</servlet-class>
+<!-- 	<servlet-class>
+	org.apache.axis.transport.http.AxisServlet</servlet-class> -->
+ 	<servlet-class>
+	dmhw.search.AxisWrapperServlet</servlet-class>
+	<load-on-startup>1</load-on-startup>	
 </servlet>
 <servlet>
 	<display-name>
