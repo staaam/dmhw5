@@ -46,6 +46,13 @@ import dmhw.search.MBSearchServiceLocator;
 		
 		ArrayList<Message> messages = MessageManager.getByUser(user);
 		
+		String viewtype = (String)request.getParameter("viewtype");
+		if ("html".equals(viewtype)) {
+			request.setAttribute("messages", messages);
+	        RequestDispatcher requestDispatcher = this.getServletContext().getRequestDispatcher(Pages.showMessages);
+	        requestDispatcher.forward(request, response);
+			return;
+		}
 		
 		response.setContentType("text/xml");
 	    PrintWriter out = response.getWriter();

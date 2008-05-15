@@ -10,6 +10,7 @@ You're logged in as ${username}<br/>
 <a href="login.jsp">login</a><br/>
 <a href="newmessage.jsp">new message</a><br/>
 <a href="boardview">board view</a><br/>
+<a href="boardview?viewtype=html">board view (html)</a><br/>
 <a href="logout">logout</a><br/>
 <br/>
 <a href="localSearch.jsp">Local Search</a><br/>
