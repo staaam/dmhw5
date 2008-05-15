@@ -67,5 +67,13 @@ public class Message {
 	public void setAuthor(String author) {
 		this.author = author;
 	}
+
+	public void setStartTime(Integer stime) {
+		startTime = new Date();
+	}
+	
+	public void setEndTime(Integer etime) {
+		endTime = new Date(etime.longValue());
+	}
 	
 }
