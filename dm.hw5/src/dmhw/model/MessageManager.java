@@ -12,19 +12,13 @@ import dmhw.model.DB.UsersTable;
 public class MessageManager {
 
 	public static ArrayList<Message> getByUser(User user) {
+		return searchMessages(null, user.getRank(), new Date().getTime(), user.getType()); 
+	}
+
+	private static ArrayList<Message> getMessages(String query) {
 		ArrayList<Message> m = new ArrayList<Message>();
 		try {
-			long now = new Date().getTime();
-			String q = "SELECT "+MessagesTable.TableName+".*,"+UsersTable.Username+" FROM "
-					+ MessagesTable.TableName + " JOIN " + UsersTable.TableName
-					+ " ON " + MessagesTable.TableName+"."+MessagesTable.UserId + "="+UsersTable.TableName+"."+UsersTable.UserId
-					+ " WHERE "
-					+ MessagesTable.TableName+"."+MessagesTable.Type + "='"+user.getType()+"'" + " AND "
-					+ MessagesTable.TableName+"."+MessagesTable.Rank + "<='"+user.getRank()+"'" + " AND "
-					+ MessagesTable.STime + "<="+now + " AND "
-					+ MessagesTable.ETime + ">="+now;
-			
-			ResultSet rs = DB.getInstance().executeQuery(q);
+			ResultSet rs = DB.getInstance().executeQuery(query);
 			
 			while (rs.next()) {
 				m.add(makeMessage(rs));
@@ -33,7 +27,7 @@ public class MessageManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return m; 
+		return m;
 	}
 
 	private static Message makeMessage(ResultSet rs) throws SQLException {
@@ -122,6 +116,49 @@ public class MessageManager {
 		}
 		catch (Exception e) {
 		}
+	}
+
+	public static ArrayList<Message> searchMessages(String[] keywords, int rank, long time) {
+		return searchMessages(keywords, rank, time, null);
+	}
+	
+	public static ArrayList<Message> searchMessages(String[] keywords, int rank, long time, String type) {
+		//listMessages();
+		
+		String q = "SELECT "+MessagesTable.TableName+".*,"+UsersTable.Username+" FROM "
+			+ MessagesTable.TableName + " JOIN " + UsersTable.TableName
+			+ " ON " + MessagesTable.TableName+"."+MessagesTable.UserId + "="+UsersTable.TableName+"."+UsersTable.UserId;
+		
+		ArrayList<String> w = new ArrayList<String>();
+		if (!Utils.isNullOrEmpty(type)) {
+			w.add(MessagesTable.TableName+"."+MessagesTable.Type + "='"+type+"'");
+		}
+		if (rank > 0) {
+			w.add(MessagesTable.TableName+"."+MessagesTable.Rank + "<="+rank);
+		}
+		if (time > -1) {
+			w.add(MessagesTable.TableName+"."+MessagesTable.STime + "<="+time);
+			w.add(MessagesTable.TableName+"."+MessagesTable.ETime + ">="+time);			
+		}
+		if (keywords != null) {
+			for (String word : keywords) {
+				if (!Utils.isNullOrEmpty(word)) {
+					w.add("("+MessagesTable.TableName+"."+MessagesTable.Title + " LIKE '" + word + "')OR("+MessagesTable.TableName+"."+MessagesTable.Body + " LIKE '" + word + "')");
+				}
+			}
+		}
+		if (w.size() > 0) {
+			String o = "";
+			for (String ws : w) {
+				if (o.length() > 0) {
+					o += " AND ";
+				}
+				o += "("+ws+")";
+			}
+			q += " WHERE " + o;
+		}
+		
+		return getMessages(q);
 	}
 
 }

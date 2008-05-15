@@ -12,6 +12,16 @@ public class Message {
 	private String body = "some text";
 	
 	private String author = "stam";
+	
+	public String toXML() {
+		return "<message>"
+		+"<title>"+title+"</title>"
+		+"<rank>"+rank+"</rank>"
+		+"<start>"+startTime+"</start>"
+		+"<end>"+endTime+"</end>"
+		+"<body>"+body+"</body>"
+		+"</message>";
+	}
 
 	public int getId() {
 		return id;

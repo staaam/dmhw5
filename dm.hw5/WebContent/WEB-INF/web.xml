@@ -29,6 +29,26 @@
 	<servlet-name>deletemessage</servlet-name>
 	<servlet-class>dmhw.servlet.DeleteMessageControllerServlet</servlet-class>
 </servlet>
+<servlet>
+	<servlet-name>sharedsearch</servlet-name>
+	<servlet-class>dmhw.servlet.SharedSearchControllerServlet</servlet-class>
+</servlet>
+
+<servlet>
+	<display-name>
+	Apache-Axis Servlet</display-name>
+	<servlet-name>AxisServlet</servlet-name>
+	<servlet-class>
+	org.apache.axis.transport.http.AxisServlet</servlet-class>
+</servlet>
+<servlet>
+	<display-name>
+	Axis Admin Servlet</display-name>
+	<servlet-name>AdminServlet</servlet-name>
+	<servlet-class>
+	org.apache.axis.transport.http.AdminServlet</servlet-class>
+	<load-on-startup>100</load-on-startup>
+</servlet>
 
 <servlet-mapping>
 	<servlet-name>login</servlet-name>
@@ -53,6 +73,26 @@
 <servlet-mapping>
 	<servlet-name>deletemessage</servlet-name>
 	<url-pattern>/deletemessage</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+	<servlet-name>sharedsearch</servlet-name>
+	<url-pattern>/sharedsearch</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+	<servlet-name>AxisServlet</servlet-name>
+	<url-pattern>/servlet/AxisServlet</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+	<servlet-name>AxisServlet</servlet-name>
+	<url-pattern>*.jws</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+	<servlet-name>AxisServlet</servlet-name>
+	<url-pattern>/services/*</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+	<servlet-name>AdminServlet</servlet-name>
+	<url-pattern>/servlet/AdminServlet</url-pattern>
 </servlet-mapping>
 
 	<welcome-file-list>

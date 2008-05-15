@@ -11,5 +11,7 @@ You're logged in as ${username}<br/>
 <a href="newmessage.jsp">new message</a><br/>
 <a href="boardview">board view</a><br/>
 <a href="logout">logout</a><br/>
+<br/>
+<a href="sharedSearch.jsp">Shared Search</a><br/>
 </body>
 </html>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- Use this file to deploy some handlers/chains and services      --><!-- Two ways to do this:                                           --><!--   java org.apache.axis.client.AdminClient deploy.wsdd          --><!--      after the axis server is running                          --><!-- or                                                             --><!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   --><!--      from the same directory that the Axis engine runs         --><deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from MBSearchImplService WSDL service -->
+
+  <service name="MBSearchImpl" provider="java:RPC" style="wrapped" use="literal">
+      <parameter name="wsdlTargetNamespace" value="http://search.dmhw"/>
+      <parameter name="wsdlServiceElement" value="MBSearchImplService"/>
+      <parameter name="schemaQualified" value="http://search.dmhw"/>
+      <parameter name="wsdlServicePort" value="MBSearchImpl"/>
+      <parameter name="className" value="dmhw.search.MBSearchImpl"/>
+      <parameter name="wsdlPortType" value="MBSearchImpl"/>
+      <parameter name="typeMappingVersion" value="1.2"/>
+      <operation xmlns:operNS="http://search.dmhw" xmlns:retNS="http://search.dmhw" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="search" qname="operNS:search" returnQName="retNS:searchReturn" returnType="rtns:string" soapAction="">
+        <parameter xmlns:pns="http://search.dmhw" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:keywords" type="tns:string"/>
+        <parameter xmlns:pns="http://search.dmhw" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:rank" type="tns:int"/>
+        <parameter xmlns:pns="http://search.dmhw" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:time" type="tns:long"/>
+      </operation>
+      <parameter name="allowedMethods" value="search"/>
+
+  </service>
+</deployment>
