@@ -20,15 +20,12 @@ import dmhw.model.*;
  */
 abstract public class ControllerServlet extends javax.servlet.http.HttpServlet implements javax.servlet.Servlet{
 	
-	/**
-	 * Repository instance aquired through <code>org.apache.jackrabbit.servlet.ServletRepository</code>
-	 */
-//	protected final Repository repository = new ServletRepository(this); 
-	
-	// JCR session used to access the repository
-//	protected Session session = null;
-	
-	
+	@Override
+	public void init() throws ServletException {
+		super.init();
+		DB.init(this.getServletContext());
+	}
+
 	/** 
 	 * Method which handles the GET method requests
 	 */
