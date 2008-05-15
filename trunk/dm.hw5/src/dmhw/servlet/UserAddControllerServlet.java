@@ -82,6 +82,15 @@ import dmhw.model.*;
 			return;
 		}
 		
+		if (type.length() > 15) {
+			this.responseMessage(request, response,
+					"Type is too long",
+					"Type length should be less or equal that 15",
+					"Try another type",
+					Pages.newuser);
+			return;
+		}
+
 		if (rank == null || rank.intValue() < 0 || rank.intValue() > 10) {
 			this.responseMessage(request, response,
 					"Rank is incorrect",
