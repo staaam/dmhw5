@@ -33,6 +33,10 @@
 	<servlet-name>sharedsearch</servlet-name>
 	<servlet-class>dmhw.servlet.SharedSearchControllerServlet</servlet-class>
 </servlet>
+<servlet>
+	<servlet-name>localsearch</servlet-name>
+	<servlet-class>dmhw.servlet.LocalSearchControllerServlet</servlet-class>
+</servlet>
 
 <servlet>
 	<display-name>
@@ -77,6 +81,10 @@
 <servlet-mapping>
 	<servlet-name>sharedsearch</servlet-name>
 	<url-pattern>/sharedsearch</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+	<servlet-name>localsearch</servlet-name>
+	<url-pattern>/localsearch</url-pattern>
 </servlet-mapping>
 <servlet-mapping>
 	<servlet-name>AxisServlet</servlet-name>

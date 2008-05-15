@@ -24,7 +24,7 @@
 <td>Keywords</td><td><input type="text" name="keywords"/></td>
 </tr>
 <tr>
-<td>Rank</td><td><input type="text" name="rank"/></td>
+<td>Rank</td><td><select name="rank"><c:forEach begin="1" end="10" var="d"><option value="${d}">${d}</option></c:forEach></select></td>
 </tr>
 <tr>
 <td>Time</td><td>
