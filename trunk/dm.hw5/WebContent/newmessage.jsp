@@ -10,7 +10,7 @@
 <table>
 <tr><td align="left">Title:</td><td><input name="title" type="text"/></td></tr>
 <tr><td align="left">Type:</td><td><input name="type" type="text"/></td></tr>
-<tr><td align="left">Rank:</td><td><input name="rank" type="text"/></td></tr>
+<tr><td align="left">Rank:</td><td><select name="rank"><c:forEach begin="1" end="10" var="d"><option value="${d}">${d}</option></c:forEach></select></td></tr>
 <tr><td align="left">StartTime:</td><td>
 <select name="sd"><c:forEach begin="1" end="31" var="d"><option value="${d}">${d}</option></c:forEach></select>
 <select name="sm"><c:forEach begin="1" end="12" var="d"><option value="${d}">${d}</option></c:forEach></select>

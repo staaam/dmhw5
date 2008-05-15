@@ -143,7 +143,7 @@ public class MessageManager {
 		if (keywords != null) {
 			for (String word : keywords) {
 				if (!Utils.isNullOrEmpty(word)) {
-					w.add("("+MessagesTable.TableName+"."+MessagesTable.Title + " LIKE '" + word + "')OR("+MessagesTable.TableName+"."+MessagesTable.Body + " LIKE '" + word + "')");
+					w.add("("+MessagesTable.TableName+"."+MessagesTable.Title + " LIKE '%" + word + "%')OR("+MessagesTable.TableName+"."+MessagesTable.Body + " LIKE '%" + word + "%')");
 				}
 			}
 		}

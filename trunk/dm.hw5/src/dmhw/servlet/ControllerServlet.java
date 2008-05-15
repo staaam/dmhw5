@@ -26,16 +26,16 @@ abstract public class ControllerServlet extends javax.servlet.http.HttpServlet i
 	public void init() throws ServletException {
 		super.init();
 		DB.init(this.getServletContext());
-		try {
-			RegistrationServiceService rss = new RegistrationServiceServiceLocator();
-			RegistrationService rs = rss.getEndpointsRegistration();
-			String[] srvs = rs.getRegisteredEndpoints();
-			for (String s : srvs) {
-				System.out.println(s);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+//		try {
+//			RegistrationServiceService rss = new RegistrationServiceServiceLocator();
+//			RegistrationService rs = rss.getEndpointsRegistration();
+//			String[] srvs = rs.getRegisteredEndpoints();
+//			for (String s : srvs) {
+//				System.out.println(s);
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 	}
 
 	/** 

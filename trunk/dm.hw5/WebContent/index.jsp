@@ -12,6 +12,7 @@ You're logged in as ${username}<br/>
 <a href="boardview">board view</a><br/>
 <a href="logout">logout</a><br/>
 <br/>
+<a href="localSearch.jsp">Local Search</a><br/>
 <a href="sharedSearch.jsp">Shared Search</a><br/>
 </body>
 </html>
