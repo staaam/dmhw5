@@ -1,6 +1,5 @@
 package dmhw.model;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -29,7 +28,8 @@ public class DB {
 			try {
 				db = new DB(servletContext.getRealPath("/") + "/WEB-INF");
 				try {
-					db.constructTables();
+//					db.deleteTables();
+//					db.constructTables();
 				}
 				catch (Exception e) {
 				}
@@ -90,8 +90,8 @@ public class DB {
 //				+ MessagesTable.TypeId + " INT NOT NULL, "
 				+ MessagesTable.Type + " VARCHAR(15) NOT NULL, "
 				+ MessagesTable.Rank + " INT NOT NULL, "
-				+ MessagesTable.STime + " DATE NOT NULL, "
-				+ MessagesTable.ETime + " DATE NOT NULL, "
+				+ MessagesTable.STime + " LONG NOT NULL, "
+				+ MessagesTable.ETime + " LONG NOT NULL, "
 				+ MessagesTable.Body + " VARCHAR(2047) NOT NULL"
 				+ ")"
 ////				+ " FOREIGN KEY ( " + MessagesTable.TypeId + " ) "

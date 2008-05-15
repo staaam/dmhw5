@@ -9,35 +9,22 @@ import dmhw.model.DB.UsersTable;
 public class UserManager {
 	
 	public static boolean login(String username, String password) {
-		try {
-			ResultSet rs = DB.getInstance().executeQuery(String.format(
-						"SELECT 1 FROM "+UsersTable.TableName+" WHERE %s='%s' AND %s='%s'",
-						UsersTable.Username, username,
-						UsersTable.Password, password
-						));
-			
-			if (rs.next())
-				return true;
-			
-		} catch (SQLException e) {
-			return false;
-		}
+		User u = getUser(username);
+		if (u != null && u.getPassword().equals(password))
+			return true;
 		return false;
 	}
 
 	public static boolean exists(String username) {
-		try {
-			ResultSet rs = DB.getInstance().executeQuery(String.format(
-						"SELECT 1 FROM "+UsersTable.TableName+" WHERE %s='%s'",
-						UsersTable.Username, username
-						));
-			
-			if (rs.next())
-				return true;
-		} catch (SQLException e) {
-			return false;
-		}
-		return false;
+		User u = getUser(username);
+		return u != null;
+	}
+
+	public static int getUserId(String username) {
+		User user = getUser(username);
+		if (user != null)
+			return user.getId();
+		return -1;
 	}
 
 	public static void addUser(User user) {
@@ -64,7 +51,7 @@ public class UserManager {
 		try {
 			ResultSet rs = DB.getInstance().executeQuery("SELECT * FROM "+UsersTable.TableName);
 			while (rs.next()) {
-				User u = getUser(rs);
+				User u = makeUser(rs);
 				System.out.println(String.format("user: %s, type %s, rank %d, password %s", u.getUsername(), u.getType(), u.getRank(), u.getPassword()));
 			}
 		} catch (SQLException e) {
@@ -80,21 +67,21 @@ public class UserManager {
 					UsersTable.Username, username
 					));
 	
-			if (rs.next())
+			if (!rs.next())
 				return null;
 		
-			return getUser(rs);
+			return makeUser(rs);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 
-	private static User getUser(ResultSet rs) throws SQLException {
-		return new User(rs.getString(UsersTable.Username),
+	private static User makeUser(ResultSet rs) throws SQLException {
+		return new User(rs.getInt(UsersTable.UsrId),
+				rs.getString(UsersTable.Username),
 				rs.getString(UsersTable.Password),
 				rs.getString(UsersTable.Type),
 				rs.getInt(UsersTable.Rank));
 	}
-
 }

@@ -1,15 +1,99 @@
 package dmhw.model;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
+
+import dmhw.model.DB.MessagesTable;
+import dmhw.model.DB.UsersTable;
 
 public class MessageManager {
 
 	public static ArrayList<Message> getByUser(User user) {
 		ArrayList<Message> m = new ArrayList<Message>();
-		m.add(new Message());
-		m.add(new Message());
-		m.add(new Message());
+		try {
+			long now = new Date().getTime();
+			String q = "SELECT "+MessagesTable.TableName+".*,"+UsersTable.Username+" FROM "
+					+ MessagesTable.TableName + " JOIN " + UsersTable.TableName
+					+ " ON " + MessagesTable.TableName+"."+MessagesTable.UserId + "="+UsersTable.TableName+"."+UsersTable.UsrId
+					+ " WHERE "
+					+ MessagesTable.TableName+"."+MessagesTable.Type + "='"+user.getType()+"'" + " AND "
+					+ MessagesTable.TableName+"."+MessagesTable.Rank + "<='"+user.getRank()+"'" + " AND "
+					+ MessagesTable.STime + "<="+now + " AND "
+					+ MessagesTable.ETime + ">="+now;
+			
+			ResultSet rs = DB.getInstance().executeQuery(q);
+			
+			while (rs.next()) {
+				m.add(makeMessage(rs));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return m; 
+	}
+
+	private static Message makeMessage(ResultSet rs) throws SQLException {
+		Message m = new Message();
+		m.setAuthor(UsersTable.Username);
+		m.setTitle(rs.getString(MessagesTable.Title));
+		m.setType(rs.getString(MessagesTable.Type));
+		m.setRank(rs.getInt(MessagesTable.Rank));
+		m.setStartTime(new Date(rs.getLong(MessagesTable.STime)));
+		m.setEndTime(new Date(rs.getLong(MessagesTable.ETime)));
+		m.setBody(rs.getString(MessagesTable.Body));
+		return m;
+	}
+	
+	private static void listMessages() {
+		try {
+			long now = new Date().getTime();
+			System.out.println("now: " + now);
+			String q = "SELECT "+MessagesTable.TableName+".*,"+UsersTable.Username+" FROM "
+					+ MessagesTable.TableName + " JOIN " + UsersTable.TableName
+					+ " ON " + MessagesTable.TableName+"."+MessagesTable.UserId + "="+UsersTable.TableName+"."+UsersTable.UsrId;
+			
+			ResultSet rs = DB.getInstance().executeQuery(q);
+			
+			while (rs.next()) {
+				Message m = makeMessage(rs); 
+				System.out.println(String.format("title: %s, user: %s, type: %s, rank: %d, stime: "+m.getStartTime().getTime()+", etime: "+m.getEndTime().getTime()+", body:\n%s", 
+						m.getTitle(), m.getAuthor(),
+						m.getType(), m.getRank(), m.getBody()));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public static void addMessage(Message msg) {
+		try {
+			PreparedStatement pstmt = DB.getInstance().prepareStatement(
+					"INSERT INTO "+MessagesTable.TableName+"("
+					+ MessagesTable.Title + ","
+					+ MessagesTable.Type + ","
+					+ MessagesTable.Rank + ","
+					+ MessagesTable.STime + ","
+					+ MessagesTable.ETime + ","
+					+ MessagesTable.Body + ","
+					+ MessagesTable.UserId
+					+ ")"+" VALUES (?,?,?,?,?,?,?)");
+			pstmt.setString(1, msg.getTitle());
+			pstmt.setString(2, msg.getType());
+			pstmt.setInt(3, msg.getRank());
+			pstmt.setLong(4, msg.getStartTime().getTime());
+			pstmt.setLong(5, msg.getEndTime().getTime());
+			pstmt.setString(6, msg.getBody());
+			pstmt.setInt(7, UserManager.getUserId(msg.getAuthor()));
+			DB.getInstance().execute(pstmt);
+			
+			listMessages();
+		} catch (SQLException e) {
+		}
 	}
 
 }

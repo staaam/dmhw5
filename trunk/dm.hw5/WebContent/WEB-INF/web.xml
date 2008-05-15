@@ -21,6 +21,10 @@
 	<servlet-name>boardview</servlet-name>
 	<servlet-class>dmhw.servlet.BoardViewControllerServlet</servlet-class>
 </servlet>
+<servlet>
+	<servlet-name>newmessage</servlet-name>
+	<servlet-class>dmhw.servlet.MessageAddControllerServlet</servlet-class>
+</servlet>
 
 <servlet-mapping>
 	<servlet-name>login</servlet-name>
@@ -38,7 +42,10 @@
 	<servlet-name>boardview</servlet-name>
 	<url-pattern>/boardview</url-pattern>
 </servlet-mapping>
-
+<servlet-mapping>
+	<servlet-name>newmessage</servlet-name>
+	<url-pattern>/newmessage</url-pattern>
+</servlet-mapping>
    
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
