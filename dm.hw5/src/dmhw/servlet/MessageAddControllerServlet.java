@@ -53,8 +53,27 @@ import dmhw.model.*;
             return;
 		}
 		
+		
 		String title = request.getParameter("title");
 		String type = request.getParameter("type");
+		
+		if (Utils.isNullOrEmpty(type)) {
+			this.responseMessage(request, response,
+					"Type is empty",
+					"Type should be non empty string",
+					"Try another type",
+					Pages.newmessage);
+			return;
+		}
+		if (type.length() > 15) {
+			this.responseMessage(request, response,
+					"Type is too long",
+					"Type length should be less or equal that 15",
+					"Try another type",
+					Pages.newmessage);
+			return;
+		}
+
 		Integer rank = Utils.toInteger(request.getParameter("rank"));
 
 		Integer sd = Utils.toInteger(request.getParameter("sd"));
