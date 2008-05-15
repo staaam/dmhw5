@@ -78,7 +78,7 @@ public class UserManager {
 	}
 
 	private static User makeUser(ResultSet rs) throws SQLException {
-		return new User(rs.getInt(UsersTable.UsrId),
+		return new User(rs.getInt(UsersTable.UserId),
 				rs.getString(UsersTable.Username),
 				rs.getString(UsersTable.Password),
 				rs.getString(UsersTable.Type),

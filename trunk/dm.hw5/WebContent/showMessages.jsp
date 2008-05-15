@@ -9,14 +9,15 @@
 </head>
 <body>
 <c:forEach var="message" items="${messages}">
-	<table width="100%">
+	<table width="100%" border="1">
 		<tr><td>title:</td><td>${message.title}</td></tr>
 		<tr><td>author:</td><td>${message.author}</td></tr>
 		<tr><td>type:</td><td>${message.type}</td></tr>
 		<tr><td>rank:</td><td>${message.rank}</td></tr>
 		<tr><td>startTime:</td><td>${message.startTime}</td></tr>
 		<tr><td>endTime:</td><td>${message.endTime}</td></tr>
-		<tr><td>body:</td><td>${message.body}</td></tr>
+		<tr><td>body:</td><td><pre>${message.body}</pre></td></tr>
+		<tr><td><form action="deletemessage" method="POST"><input type="hidden" name="msgid" value="${message.id}"/><input type="submit" value="Delete"/></form></td><td></td></tr>
 	</table>
 </c:forEach>
 </body>

@@ -3,6 +3,7 @@ package dmhw.model;
 import java.util.Date;
 
 public class Message {
+	private int id = -1;
 	private String title = "title";
 	private String type = "type";
 	private Integer rank = new Integer(1);
@@ -11,6 +12,14 @@ public class Message {
 	private String body = "some text";
 	
 	private String author = "stam";
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	public String getTitle() {
 		return title;
