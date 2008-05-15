@@ -1,6 +1,8 @@
 package dmhw.servlet;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.URL;
 import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
@@ -9,6 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dmhw.model.*;
+import dmhw.search.MBSearch;
+import dmhw.search.MBSearchService;
+import dmhw.search.MBSearchServiceLocator;
 
 
 
@@ -40,10 +45,18 @@ import dmhw.model.*;
 		User user = UserManager.getUser(username);
 		
 		ArrayList<Message> messages = MessageManager.getByUser(user);
-		request.setAttribute("messages",messages);
 		
-		// Forward the request to blog entries page
-        RequestDispatcher requestDispatcher = this.getServletContext().getRequestDispatcher(Pages.showMessages);
-        requestDispatcher.forward(request, response);
+		
+		response.setContentType("text/xml");
+	    PrintWriter out = response.getWriter();
+	    out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+	    out.println("<messages>");
+		out.println("<message_list>");
+		out.println("<type>"+user.getType()+"</type>");
+		for (Message m : messages) {
+			out.println(m.toXML());
+		}
+		out.println("</message_list>");
+	    out.println("</messages>");
 	}   	  	    
 }

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://moontiga.no-ip.org:8080/axis/services/MyService" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://moontiga.no-ip.org:8080/axis/services/MyService" xmlns:intf="http://moontiga.no-ip.org:8080/axis/services/MyService" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
+ <wsdl:types>
+  <schema targetNamespace="http://moontiga.no-ip.org:8080/axis/services/MyService" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+   <complexType name="ArrayOf_xsd_string">
+    <complexContent>
+     <restriction base="soapenc:Array">
+      <attribute ref="soapenc:arrayType" wsdl:arrayType="xsd:string[]"/>
+     </restriction>
+    </complexContent>
+   </complexType>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="searchRequest">
+
+      <wsdl:part name="keywords" type="impl:ArrayOf_xsd_string"/>
+
+      <wsdl:part name="rank" type="xsd:int"/>
+
+      <wsdl:part name="time" type="xsd:long"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="searchResponse">
+
+      <wsdl:part name="searchReturn" type="impl:ArrayOf_xsd_string"/>
+
+   </wsdl:message>
+
+   <wsdl:portType name="MBSearch">
+
+      <wsdl:operation name="search" parameterOrder="keywords rank time">
+
+         <wsdl:input message="impl:searchRequest" name="searchRequest"/>
+
+         <wsdl:output message="impl:searchResponse" name="searchResponse"/>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="MyServiceSoapBinding" type="impl:MBSearch">
+
+      <wsdlsoap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="search">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="searchRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://axis.mb.technion.ac.il" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="searchResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://moontiga.no-ip.org:8080/axis/services/MyService" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="MBSearchService">
+
+      <wsdl:port binding="impl:MyServiceSoapBinding" name="MyService">
+
+         <wsdlsoap:address location="http://moontiga.no-ip.org:8080/axis/services/MyService"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>

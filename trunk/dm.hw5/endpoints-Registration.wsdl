@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://ibm268.cs.technion.ac.il:8080/axis/services/endpoints-Registration" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://ibm268.cs.technion.ac.il:8080/axis/services/endpoints-Registration" xmlns:intf="http://ibm268.cs.technion.ac.il:8080/axis/services/endpoints-Registration" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
+ <wsdl:types>
+  <schema targetNamespace="http://ibm268.cs.technion.ac.il:8080/axis/services/endpoints-Registration" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+   <complexType name="ArrayOf_xsd_string">
+    <complexContent>
+     <restriction base="soapenc:Array">
+      <attribute ref="soapenc:arrayType" wsdl:arrayType="xsd:string[]"/>
+     </restriction>
+    </complexContent>
+   </complexType>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="deleteEndpointResponse">
+
+      <wsdl:part name="deleteEndpointReturn" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="addEndpointRequest">
+
+      <wsdl:part name="url" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getRegisteredEndpointsResponse">
+
+      <wsdl:part name="getRegisteredEndpointsReturn" type="impl:ArrayOf_xsd_string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getRegisteredEndpointsRequest">
+
+   </wsdl:message>
+
+   <wsdl:message name="addEndpointResponse">
+
+      <wsdl:part name="addEndpointReturn" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="deleteEndpointRequest">
+
+      <wsdl:part name="url" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:portType name="RegistrationService">
+
+      <wsdl:operation name="addEndpoint" parameterOrder="url">
+
+         <wsdl:input message="impl:addEndpointRequest" name="addEndpointRequest"/>
+
+         <wsdl:output message="impl:addEndpointResponse" name="addEndpointResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="deleteEndpoint" parameterOrder="url">
+
+         <wsdl:input message="impl:deleteEndpointRequest" name="deleteEndpointRequest"/>
+
+         <wsdl:output message="impl:deleteEndpointResponse" name="deleteEndpointResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getRegisteredEndpoints">
+
+         <wsdl:input message="impl:getRegisteredEndpointsRequest" name="getRegisteredEndpointsRequest"/>
+
+         <wsdl:output message="impl:getRegisteredEndpointsResponse" name="getRegisteredEndpointsResponse"/>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="endpoints-RegistrationSoapBinding" type="impl:RegistrationService">
+
+      <wsdlsoap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="addEndpoint">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="addEndpointRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://hw5.cs236607" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="addEndpointResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ibm268.cs.technion.ac.il:8080/axis/services/endpoints-Registration" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="deleteEndpoint">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="deleteEndpointRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://hw5.cs236607" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="deleteEndpointResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ibm268.cs.technion.ac.il:8080/axis/services/endpoints-Registration" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getRegisteredEndpoints">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getRegisteredEndpointsRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://hw5.cs236607" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getRegisteredEndpointsResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ibm268.cs.technion.ac.il:8080/axis/services/endpoints-Registration" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="RegistrationServiceService">
+
+      <wsdl:port binding="impl:endpoints-RegistrationSoapBinding" name="endpoints-Registration">
+
+         <wsdlsoap:address location="http://ibm268.cs.technion.ac.il:8080/axis/services/endpoints-Registration"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>
