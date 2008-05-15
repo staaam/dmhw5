@@ -71,7 +71,7 @@ public class DB {
 //				);
 		poseUpdate(
 				"CREATE TABLE " + UsersTable.TableName + " ("
-				+ UsersTable.UsrId + " INT NOT NULL AUTO_INCREMENT PRIMARY KEY, "
+				+ UsersTable.UserId + " INT NOT NULL AUTO_INCREMENT PRIMARY KEY, "
 				+ UsersTable.Username + " VARCHAR(255) NOT NULL, "
 //				+ UsersTable.TypeId + " INT NOT NULL, "
 				+ UsersTable.Type + " VARCHAR(15) NOT NULL, "
@@ -147,7 +147,7 @@ public class DB {
 	public class UsersTable {
 		public static final String TableName = "Users"; 
 		
-		public static final String UsrId = "MsgId";
+		public static final String UserId = "UserId";
 		public static final String Username = "Username";
 //		public static final String TypeId = "TypeId";
 		public static final String Type = "Type";

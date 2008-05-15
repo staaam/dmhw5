@@ -17,7 +17,7 @@ public class MessageManager {
 			long now = new Date().getTime();
 			String q = "SELECT "+MessagesTable.TableName+".*,"+UsersTable.Username+" FROM "
 					+ MessagesTable.TableName + " JOIN " + UsersTable.TableName
-					+ " ON " + MessagesTable.TableName+"."+MessagesTable.UserId + "="+UsersTable.TableName+"."+UsersTable.UsrId
+					+ " ON " + MessagesTable.TableName+"."+MessagesTable.UserId + "="+UsersTable.TableName+"."+UsersTable.UserId
 					+ " WHERE "
 					+ MessagesTable.TableName+"."+MessagesTable.Type + "='"+user.getType()+"'" + " AND "
 					+ MessagesTable.TableName+"."+MessagesTable.Rank + "<='"+user.getRank()+"'" + " AND "
@@ -38,7 +38,8 @@ public class MessageManager {
 
 	private static Message makeMessage(ResultSet rs) throws SQLException {
 		Message m = new Message();
-		m.setAuthor(UsersTable.Username);
+		m.setId(rs.getInt(MessagesTable.MsgId));
+		m.setAuthor(rs.getString(UsersTable.Username));
 		m.setTitle(rs.getString(MessagesTable.Title));
 		m.setType(rs.getString(MessagesTable.Type));
 		m.setRank(rs.getInt(MessagesTable.Rank));
@@ -54,7 +55,7 @@ public class MessageManager {
 			System.out.println("now: " + now);
 			String q = "SELECT "+MessagesTable.TableName+".*,"+UsersTable.Username+" FROM "
 					+ MessagesTable.TableName + " JOIN " + UsersTable.TableName
-					+ " ON " + MessagesTable.TableName+"."+MessagesTable.UserId + "="+UsersTable.TableName+"."+UsersTable.UsrId;
+					+ " ON " + MessagesTable.TableName+"."+MessagesTable.UserId + "="+UsersTable.TableName+"."+UsersTable.UserId;
 			
 			ResultSet rs = DB.getInstance().executeQuery(q);
 			
@@ -93,6 +94,33 @@ public class MessageManager {
 			
 			listMessages();
 		} catch (SQLException e) {
+		}
+	}
+
+	public static Message getMessage(int msgid) {
+		try {
+			String q = "SELECT "+MessagesTable.TableName+".*,"+UsersTable.Username+" FROM "
+			+ MessagesTable.TableName + " JOIN " + UsersTable.TableName
+			+ " ON " + MessagesTable.TableName+"."+MessagesTable.UserId + "="+UsersTable.TableName+"."+UsersTable.UserId
+			+ " WHERE "
+			+ MessagesTable.MsgId + "=" + msgid;
+			ResultSet rs = DB.getInstance().executeQuery(q);
+				
+			if (rs.next())
+				return makeMessage(rs);
+		}
+		catch (Exception e) {
+		}
+		return null;
+	}
+
+	public static void deleteMessage(int msgid) {
+		try {
+			String q = "DELETE FROM "+MessagesTable.TableName
+			+ " WHERE " + MessagesTable.MsgId + "=" + msgid;
+			DB.getInstance().poseUpdate(q);
+		}
+		catch (Exception e) {
 		}
 	}
 
