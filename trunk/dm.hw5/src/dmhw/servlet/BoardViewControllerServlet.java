@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -54,16 +56,32 @@ import dmhw.search.MBSearchServiceLocator;
 			return;
 		}
 		
+		BoardViewControllerServlet.printMessages(response, messages);
+	}
+	
+	public static void printMessages(HttpServletResponse response,
+			ArrayList<Message> messages) throws IOException {
+		HashMap<String, LinkedList<Message>> map = new HashMap<String, LinkedList<Message>>();
+		for (Message m : messages) {
+			String t = m.getType();
+			if (!map.containsKey(t))
+				map.put(t, new LinkedList<Message>());
+			map.get(t).add(m);
+		}
+		
 		response.setContentType("text/xml");
 	    PrintWriter out = response.getWriter();
 	    out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+	    out.println("<?xml-stylesheet type=\"text/xsl\" href=\"messages.xsl\"?>");
 	    out.println("<messages>");
-		out.println("<message_list>");
-		out.println("<type>"+user.getType()+"</type>");
-		for (Message m : messages) {
-			out.println(m.toXML());
-		}
-		out.println("</message_list>");
+	    for (String t : map.keySet()) {
+			out.println("<message_list>");
+			out.println("<type>"+t+"</type>");
+			for (Message m : map.get(t)) {
+				out.println(m.toXML());
+			}
+			out.println("</message_list>");
+	    }
 	    out.println("</messages>");
-	}   	  	    
+	}   	
 }

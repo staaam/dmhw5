@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!ELEMENT messages (message_list*)>
+
+<!ELEMENT message_list (type, message*)>
+<!ELEMENT type (#PCDATA)>
+
+<!ELEMENT message (title, rank, start, end, body, id?)>
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT rank (#PCDATA)>
+<!ELEMENT start (#PCDATA)>
+<!ELEMENT end (#PCDATA)>
+<!ELEMENT body (#PCDATA)>
+<!ELEMENT id (#PCDATA)>

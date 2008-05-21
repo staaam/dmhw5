@@ -1,0 +1,94 @@
+A {
+	COLOR: #350000; TEXT-DECORATION: none
+}
+A:hover {
+	COLOR: #660000; TEXT-DECORATION: underline
+}
+A.noline {
+	COLOR: #b16f30; TEXT-DECORATION: none
+}
+A.noline:hover {
+	COLOR: #9c4c00; TEXT-DECORATION: underline
+}
+
+body {
+	background: black left top repeat-x;
+	margin: 0 auto;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+.msgs {
+	margin: 0 auto;
+	position: relative;
+	background: transparent left top repeat-y;
+	z-index: 1;
+	margin-bottom: 50px;
+}
+
+.msg-list {
+	color: #fff;
+	margin: 10px;
+	font: normal 80%/18px Arial, Helvetica, sans-serif;
+	position: relative;
+	border-left: ridge;
+	border-left-color: peru;
+}
+
+		.msg-list .type {
+			text-align: center;
+			font-weight: bold;
+			padding: 5px;			
+			background: peru;
+			font-size: 20px;
+		}
+		
+		.msg-list .type .label {
+			text-transform: uppercase;
+		}
+		
+.msg {
+	margin: 5px;
+	padding-left: 10px;
+	width: 95%;
+	padding-bottom: 15px;
+}
+
+		.msg .title {
+			background: #ff7700 left top no-repeat;
+			color: black;
+			font-size: 14px;
+			padding: 2px;
+			text-indent: 5px;
+			height: expression( this.scrollHeight < 20 ? "20px" : "auto" );
+			min-height: 20px;
+		}
+
+			.msg .title .label {
+				display: none;
+			}
+
+		.msg .details {
+			background: transparent 30px 0px no-repeat;
+			float: right;
+			border-left: dotted;
+			border-right: thin solid;
+			border-bottom: thin solid;
+			border-color: darkorange;
+			padding: 5px;
+			height: expression( this.scrollHeight < 55 ? "55px" : "auto" );
+			min-height: 55px;
+		}
+
+		.msg .body {
+			background: transparent 30px 0px no-repeat;	
+			text-align: justify;
+			word-wrap: break-word; /* Internet Explorer 5.5+ */
+			margin: 5px;
+			width: 100%;
+			min-height: 55px;
+		}
+			
+			.msg .body .label {
+				display: none;
+			}
+		
