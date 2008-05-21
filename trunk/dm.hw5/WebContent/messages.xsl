@@ -19,6 +19,15 @@
               <div class="end"><span class="label">End: </span><xsl:value-of select="end"/></div>
             </div>
             <div class="body"><span class="label">Body: </span><xsl:value-of select="body"/></div>
+            <xsl:if test="id">
+              <div class="id">
+              	<xsl:element name="a">
+              		<xsl:attribute name="class">id</xsl:attribute>
+              		<xsl:attribute name="href">deletemessage?msgid=<xsl:value-of select="id"/></xsl:attribute>
+              		Delete
+             	</xsl:element>
+               </div>
+            </xsl:if>
           </div>
         </xsl:for-each>
       </div>
