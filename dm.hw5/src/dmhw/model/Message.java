@@ -1,5 +1,7 @@
 package dmhw.model;
 
+import java.text.DateFormat;
+import java.text.DateFormatSymbols;
 import java.util.Date;
 
 public class Message {
@@ -12,13 +14,14 @@ public class Message {
 	private String body = "some text";
 	
 	private String author = "stam";
+	private DateFormat df = DateFormat.getDateTimeInstance();
 	
 	public String toXML() {
 		return "<message>"
 		+"<title>"+title+"</title>"
 		+"<rank>"+rank+"</rank>"
-		+"<start>"+startTime+"</start>"
-		+"<end>"+endTime+"</end>"
+		+"<start>"+df.format(startTime)+"</start>"
+		+"<end>"+df.format(endTime)+"</end>"
 		+"<body>"+body+"</body>"
 		+"</message>";
 	}

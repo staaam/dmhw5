@@ -61,6 +61,7 @@ import dmhw.search.MBSearchServiceLocator;
 		response.setContentType("text/xml");
 	    PrintWriter out = response.getWriter();
 	    out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+	    out.println("<?xml-stylesheet type=\"text/xsl\" href=\"messages.xsl\"?>");
 	    out.println("<messages>");
 	    int i=1;
 		for (String endpoint : endpoints) {
