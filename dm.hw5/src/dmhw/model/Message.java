@@ -19,6 +19,7 @@ public class Message {
 	public String toXML() {
 		return "<message>"
 		+"<title>"+title+"</title>"
+		+"<id>"+id+"</id>"
 		+"<rank>"+rank+"</rank>"
 		+"<start>"+df.format(startTime)+"</start>"
 		+"<end>"+df.format(endTime)+"</end>"
