@@ -1,6 +1,8 @@
 package dmhw.servlet;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.SQLException;
 
 //import javax.jcr.Repository;
 //import javax.jcr.Session;
@@ -51,6 +53,19 @@ abstract public class ControllerServlet extends javax.servlet.http.HttpServlet i
 
 	protected User getUser(HttpServletRequest request) {
 		String username = (String)request.getSession().getAttribute("username");
-		return Utils.isNullOrEmpty(username) ? User.GUEST : UserManager.getUser(username);
+		try {
+			return Utils.isNullOrEmpty(username) ? User.GUEST : UserManager.getUser(username);
+		} catch (SQLException e) {
+			return User.GUEST;
+		}
+	}
+
+	protected void internalError(HttpServletRequest request,HttpServletResponse response, Exception e) {
+		e.printStackTrace();
+		try {
+			response.setStatus(500);
+			e.printStackTrace( new PrintWriter(  response.getOutputStream() ));
+		} catch (IOException e1) {
+		}
 	}
 }

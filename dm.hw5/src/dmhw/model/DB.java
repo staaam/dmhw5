@@ -16,19 +16,15 @@ import snaq.db.ConnectionPoolManager;
 public class DB {
 	private static DB db = null;
 
-	private long timeout = 5000;  // 5 second timeout
+	private long timeout = 0;  // no timeout
 	private static ConnectionPool pool;
 	
 	public static void init(ServletContext servletContext) {
 		if (db == null)
 			try {
 				db = new DB(servletContext);
-				try {
-					//db.deleteTables();
-					//db.constructTables();
-				}
-				catch (Exception e) {
-				}
+//				db.deleteTables();
+//				db.constructTables();
 			}
 			catch (Exception e) {
 				print(e);
@@ -42,9 +38,10 @@ public class DB {
 	private DB(ServletContext servletContext) throws IOException {
 		String dbConfig = servletContext.getRealPath("/") + "/WEB-INF/db.properties";
 		pool = ConnectionPoolManager.getInstance(new File(dbConfig)).getPool("local");
+		pool.init(10);
 	}
 	
-	public void constructTables() {
+	public void constructTables() throws SQLException {
 //		poseUpdate(
 //				"CREATE TABLE " + TypesTable.TableName + " ("
 //				+ TypesTable.TypeId + " INT NOT NULL AUTO_INCREMENT PRIMARY KEY, "
@@ -52,6 +49,7 @@ public class DB {
 //				+ ") "
 //				+ " UNIQUE ( " + TypesTable.TypeName + " ) "
 //				);
+		try {
 		poseUpdate(
 				"CREATE TABLE " + UsersTable.TableName + " ("
 				+ UsersTable.UserId + " INT NOT NULL AUTO_INCREMENT PRIMARY KEY, "
@@ -66,6 +64,9 @@ public class DB {
 ////				+ " FOREIGN KEY ( " + UsersTable.TypeId + " ) "
 ////				+ " REFERENCES "+TypesTable.TableName+" ( " + TypesTable.TypeId + " ) "
 				);
+		}
+		catch (SQLException e) { print(e); }
+		try {
 		poseUpdate(
 				"CREATE TABLE " + MessagesTable.TableName + " ("
 				+ MessagesTable.MsgId + " INT NOT NULL AUTO_INCREMENT PRIMARY KEY, "
@@ -83,20 +84,27 @@ public class DB {
 //				+ " FOREIGN KEY ( " + MessagesTable.UserId + " ) "
 //				+ " REFERENCES "+UsersTable.TableName+" ( " + UsersTable.UsrId + " ) "
 				);
+		}
+		catch (SQLException e) { print(e); }
 	}
 	
-	public void deleteTables() {
-		poseUpdate("DROP TABLE "+MessagesTable.TableName);
-		poseUpdate("DROP TABLE "+UsersTable.TableName);
+	public void deleteTables() throws SQLException {
+		try { poseUpdate("DROP TABLE "+MessagesTable.TableName); }
+		catch (SQLException e) { print(e); }
+		try { poseUpdate("DROP TABLE "+UsersTable.TableName); }
+		catch (SQLException e) { print(e); }
 //		poseUpdate("DROP TABLE "+TypesTable.TableName);
 	}
 
 	/**
 	 * Clears the content of the cache (the tables are NOT deleted).
+	 * @throws SQLException 
 	 */
-	public void clearTables() {
-		poseUpdate("DELETE FROM "+MessagesTable.TableName);
-		poseUpdate("DELETE FROM "+UsersTable.TableName);
+	public void clearTables() throws SQLException {
+		try { poseUpdate("DELETE FROM "+MessagesTable.TableName); }
+		catch (SQLException e) { print(e); }
+		try { poseUpdate("DELETE FROM "+UsersTable.TableName); }
+		catch (SQLException e) { print(e); }
 //		poseUpdate("DELETE FROM "+TypesTable.TableName);
 	}
 	
@@ -139,16 +147,13 @@ public class DB {
 //		public static final String TypeName = "TypeName";
 //	}
 	
-	public void poseUpdate(String query) {
+	public void poseUpdate(String query) throws SQLException {
 		Connection con = null;
 		Statement stmt = null;
 		try {
 			con = pool.getConnection(timeout);
 			stmt = con.createStatement();
 			stmt.executeUpdate(query);
-		}
-		catch (SQLException e) {
-			print(e);
 		}
 		finally {
 			close(stmt);
@@ -159,27 +164,20 @@ public class DB {
 	public ResultSet executeQuery(String query) throws SQLException {
 		Connection con = null;
 		Statement stmt = null;
-		try {
-			con = pool.getConnection(timeout);
-			stmt = con.createStatement();
-			return stmt.executeQuery(query);
-		}
-		catch (SQLException e) {
-			print(e);
-			throw e;
-		}
+		con = pool.getConnection(timeout);
+		stmt = con.createStatement();
+		return stmt.executeQuery(query);
 	}
 
-	public PreparedStatement prepareStatement(String s) {
+	public PreparedStatement prepareStatement(String s) throws SQLException {
 		Connection con = null;
 		try {
 			con = pool.getConnection(timeout);
 			return con.prepareStatement(s);
 		}
 		catch (SQLException e) {
-			print(e);
 			close(con);
-			return null;
+			throw e;
 		}
 	}
 
@@ -204,7 +202,7 @@ public class DB {
 	}
 
 	public void close(Connection o) {
-		try { o.close(); }
-		catch (Exception e) {}
+//		try { o.close(); }
+//		catch (Exception e) {}
 	}
 }

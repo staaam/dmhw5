@@ -2,6 +2,7 @@ package dmhw.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -17,19 +18,27 @@ public class BoardViewControllerServlet extends ControllerServlet {
 	private static final long serialVersionUID = 4885316149052515878L;
  	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		User user = getUser(request);
-		
-		ArrayList<Message> messages = MessageManager.getByUser(user);
-		
-		String viewtype = (String)request.getParameter("viewtype");
-		if ("html".equals(viewtype)) {
-			request.setAttribute("messages", messages);
-	        RequestDispatcher requestDispatcher = this.getServletContext().getRequestDispatcher(Pages.showMessages);
-	        requestDispatcher.forward(request, response);
-			return;
-		}
-		
-		BoardViewControllerServlet.printMessages(response, messages);
+		try {
+			User user = getUser(request);
+			
+			ArrayList<Message> messages = null;
+			try {
+				messages = MessageManager.getByUser(user);
+			} catch (SQLException e) {
+			}
+			
+			String viewtype = (String)request.getParameter("viewtype");
+			if ("html".equals(viewtype)) {
+				request.setAttribute("messages", messages);
+		        RequestDispatcher requestDispatcher = this.getServletContext().getRequestDispatcher(Pages.showMessages);
+		        requestDispatcher.forward(request, response);
+				return;
+			}
+			
+			BoardViewControllerServlet.printMessages(response, messages);
+		} catch (Exception e) {
+			internalError(request, response, e);
+		}		
 	}
 
 	public static void printMessages(HttpServletResponse response,
