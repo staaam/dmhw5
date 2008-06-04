@@ -16,6 +16,7 @@ public class MBSearchImpl implements MBSearch {
 
 	public String[] search(String[] keywords, int rank, long time)
 			throws RemoteException {
+		try {
 		ArrayList<Message> l = MessageManager.searchMessages(keywords, rank, time);
 		String[] r = new String[l.size()];
 		int i=0;
@@ -24,6 +25,9 @@ public class MBSearchImpl implements MBSearch {
 			i++;
 		}
 		return r;
+		} catch (Exception e) {
+			return new String[0];
+		}
 	}
 	
 	

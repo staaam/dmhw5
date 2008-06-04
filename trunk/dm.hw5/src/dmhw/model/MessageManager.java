@@ -12,11 +12,11 @@ import dmhw.model.DB.UsersTable;
 public class MessageManager {
 	private final static DB db = DB.getInstance();
 
-	public static ArrayList<Message> getByUser(User user) {
+	public static ArrayList<Message> getByUser(User user) throws SQLException {
 		return searchMessages(null, user.getRank(), new Date().getTime(), user.getType()); 
 	}
 
-	private static ArrayList<Message> getMessages(String query) {
+	private static ArrayList<Message> getMessages(String query) throws SQLException {
 		ArrayList<Message> m = new ArrayList<Message>();
 		ResultSet rs = null;
 		try {
@@ -25,7 +25,6 @@ public class MessageManager {
 			while (rs.next())
 				m.add(makeMessage(rs));
 		}
-		catch (SQLException e) { e.printStackTrace(); }
 		finally { db.close(rs); }
 		return m;
 	}
@@ -43,7 +42,7 @@ public class MessageManager {
 		return m;
 	}
 	
-	private static void listMessages() {
+	private static void listMessages() throws SQLException {
 		ResultSet rs = null;
 		try {
 			long now = new Date().getTime();
@@ -61,11 +60,10 @@ public class MessageManager {
 						m.getType(), m.getRank(), m.getBody()));
 			}
 		}
-		catch (SQLException e) { e.printStackTrace(); }
 		finally { db.close(rs); }
 	}
 
-	public static void addMessage(Message msg) {
+	public static void addMessage(Message msg) throws SQLException {
 		PreparedStatement pstmt = null;
 		try {
 			pstmt = db.prepareStatement(
@@ -89,11 +87,10 @@ public class MessageManager {
 			
 			listMessages();
 		}
-		catch (SQLException e) { e.printStackTrace(); }
 		finally { db.close(pstmt); }
 	}
 
-	public static Message getMessage(int msgid) {
+	public static Message getMessage(int msgid) throws SQLException {
 		ResultSet rs = null;
 		try {
 			String q = "SELECT "+MessagesTable.TableName+".*,"+UsersTable.Username+" FROM "
@@ -106,22 +103,21 @@ public class MessageManager {
 			if (rs.next())
 				return makeMessage(rs);
 		}
-		catch (SQLException e) { e.printStackTrace(); }
 		finally { db.close(rs); }
 		return null;
 	}
 
-	public static void deleteMessage(int msgid) {
+	public static void deleteMessage(int msgid) throws SQLException {
 		String q = "DELETE FROM "+MessagesTable.TableName
 				+ " WHERE " + MessagesTable.MsgId + "=" + msgid;
 		db.poseUpdate(q);
 	}
 
-	public static ArrayList<Message> searchMessages(String[] keywords, int rank, long time) {
+	public static ArrayList<Message> searchMessages(String[] keywords, int rank, long time) throws SQLException {
 		return searchMessages(keywords, rank, time, null);
 	}
 	
-	public static ArrayList<Message> searchMessages(String[] keywords, int rank, long time, String type) {
+	public static ArrayList<Message> searchMessages(String[] keywords, int rank, long time, String type) throws SQLException {
 		//listMessages();
 		
 		String q = "SELECT "+MessagesTable.TableName+".*,"+UsersTable.Username+" FROM "

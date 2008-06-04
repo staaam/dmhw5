@@ -16,19 +16,23 @@ public class LocalSearchControllerServlet extends ControllerServlet {
 	private static final long serialVersionUID = 5292911530212301687L;
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		User user = getUser(request);
-		
-		String[] keywords = request.getParameter("keywords").split(" ");
-		String type = request.getParameter("type");
-		Integer rank = Utils.toInteger(request.getParameter("rank"));
-		
-		long time = -1;
-		if (!Utils.isNullOrEmpty(request.getParameter("use_time"))) {
-			time = Utils.getDate(request, "s").getTime();
+		try {
+			User user = getUser(request);
+			
+			String[] keywords = request.getParameter("keywords").split(" ");
+			String type = request.getParameter("type");
+			Integer rank = Utils.toInteger(request.getParameter("rank"));
+			
+			long time = -1;
+			if (!Utils.isNullOrEmpty(request.getParameter("use_time"))) {
+				time = Utils.getDate(request, "s").getTime();
+			}
+	
+			ArrayList<Message> messages = MessageManager.searchMessages(keywords, Math.min(user.getRank(), rank), time, type);
+			BoardViewControllerServlet.printMessages(response, messages);
+		} catch (Exception e) {
+			internalError(request, response, e);
 		}
-
-		ArrayList<Message> messages = MessageManager.searchMessages(keywords, Math.min(user.getRank(), rank), time, type);
-		BoardViewControllerServlet.printMessages(response, messages);
 	}
  	    
 }

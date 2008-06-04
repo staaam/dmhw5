@@ -9,26 +9,26 @@ import dmhw.model.DB.UsersTable;
 public class UserManager {
 	private final static DB db = DB.getInstance();
 	
-	public static boolean login(String username, String password) {
+	public static boolean login(String username, String password) throws SQLException {
 		User u = getUser(username);
 		if (u != null && u.getPassword().equals(password))
 			return true;
 		return false;
 	}
 
-	public static boolean exists(String username) {
+	public static boolean exists(String username) throws SQLException {
 		User u = getUser(username);
 		return u != null;
 	}
 
-	public static int getUserId(String username) {
+	public static int getUserId(String username) throws SQLException {
 		User user = getUser(username);
 		if (user != null)
 			return user.getId();
 		return -1;
 	}
 
-	public static void addUser(User user) {
+	public static void addUser(User user) throws SQLException {
 		if (user == null)
 			return;
 		PreparedStatement pstmt = null;
@@ -50,11 +50,10 @@ public class UserManager {
 			
 			listUsers();
 		}
-		catch (SQLException e) { e.printStackTrace(); }
 		finally { db.close(pstmt); }
 	}
 
-	private static void listUsers() {
+	private static void listUsers() throws SQLException {
 		ResultSet rs = null;
 		try {
 			rs = db.executeQuery("SELECT * FROM "+UsersTable.TableName);
@@ -63,11 +62,10 @@ public class UserManager {
 				System.out.println(String.format("user: %s, type %s, rank %d, password %s, guest %b", u.getUsername(), u.getType(), u.getRank(), u.getPassword(), u.isGuest()));
 			}
 		}
-		catch (SQLException e) { e.printStackTrace(); }
 		finally { db.close(rs); }
 	}
 
-	public static User getUser(String username) {
+	public static User getUser(String username) throws SQLException {
 		ResultSet rs = null;
 		try {
 			rs = db.executeQuery(String.format(
@@ -80,9 +78,7 @@ public class UserManager {
 		
 			return makeUser(rs);
 		}
-		catch (SQLException e) { e.printStackTrace(); }
 		finally { db.close(rs); }
-		return null;
 	}
 
 	private static User makeUser(ResultSet rs) throws SQLException {
