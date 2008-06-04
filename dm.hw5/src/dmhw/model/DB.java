@@ -16,7 +16,7 @@ import snaq.db.ConnectionPoolManager;
 public class DB {
 	private static DB db = null;
 
-	private long timeout = 5000;  // 2 second timeout
+	private long timeout = 5000;  // 5 second timeout
 	private static ConnectionPool pool;
 	
 	public static void init(ServletContext servletContext) {
@@ -24,8 +24,8 @@ public class DB {
 			try {
 				db = new DB(servletContext);
 				try {
-					db.deleteTables();
-					db.constructTables();
+//					db.deleteTables();
+//					db.constructTables();
 				}
 				catch (Exception e) {
 				}
@@ -60,6 +60,7 @@ public class DB {
 				+ UsersTable.Type + " VARCHAR(15) NOT NULL, "
 				+ UsersTable.Rank + " INT NOT NULL, "
 				+ UsersTable.Password + " VARCHAR(255) NOT NULL"
+				+ UsersTable.Guest + "BOOL NOT NULL"
 				+ ")"
 //				+ " UNIQUE ( " + UsersTable.Username + " ) "
 ////				+ " FOREIGN KEY ( " + UsersTable.TypeId + " ) "
@@ -128,6 +129,7 @@ public class DB {
 		public static final String Type = "Type";
 		public static final String Rank = "Rank";
 		public static final String Password = "Password";
+		public static final String Guest = "Guest";
 	}
 
 //	public class TypesTable {
@@ -166,10 +168,6 @@ public class DB {
 			print(e);
 			throw e;
 		}
-		finally {
-			close(stmt);
-			close(con);
-		}
 	}
 
 	public PreparedStatement prepareStatement(String s) {
@@ -187,26 +185,26 @@ public class DB {
 
 	public void execute(PreparedStatement pstmt) {
 		try { pstmt.execute(); }
-		catch (Exception e) { print(e); }
+		catch (Exception e) {}
 		finally { close(pstmt); }
 	}
 
 	public void close(ResultSet o) {
+		Statement st = null;
 		try { o.close(); }
-		catch (Exception e) { print(e); }
-		try { close(o.getStatement()); }
-		catch (Exception e) { print(e); }
+		catch (Exception e) {}
+		finally { close(st); }
 	}
 
 	public void close(Statement o) {
-		try { o.close(); }
-		catch (Exception e) { print(e); }
-		try { close(o.getConnection()); }
-		catch (Exception e) { print(e); }
+		Connection con = null;
+		try { con=o.getConnection(); o.close(); }
+		catch (Exception e) {}
+		finally { close(con); }
 	}
 
 	public void close(Connection o) {
 		try { o.close(); }
-		catch (Exception e) { print(e); }
+		catch (Exception e) {}
 	}
 }

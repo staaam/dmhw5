@@ -2,7 +2,6 @@ package dmhw.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -13,38 +12,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dmhw.model.*;
-import dmhw.search.MBSearch;
-import dmhw.search.MBSearchService;
-import dmhw.search.MBSearchServiceLocator;
 
-
-
-/**
- * Controller class which handles the viewing of his/her own blog by user
- */
- public class BoardViewControllerServlet extends ControllerServlet {
-  	
-	
-	/**
-	 * Serial version UID.
-	 */
+public class BoardViewControllerServlet extends ControllerServlet {
 	private static final long serialVersionUID = 4885316149052515878L;
  	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// Get the username of the current session. "username" attribute is set in LoginController when the user log in to the system.
-		String username = (String)request.getSession().getAttribute("username");
-		
-		if (username == null || username.equals("guest")) {
-			//set the attributes which are required by user messae page
-			this.responseMessage(request, response, 
-				"Authentication Required",
-				"You have to log in to see your blog page",
-				"go back to login page",
-				Pages.login);	
-            return;
-		}
-		
-		User user = UserManager.getUser(username);
+		User user = getUser(request);
 		
 		ArrayList<Message> messages = MessageManager.getByUser(user);
 		
@@ -58,7 +31,7 @@ import dmhw.search.MBSearchServiceLocator;
 		
 		BoardViewControllerServlet.printMessages(response, messages);
 	}
-	
+
 	public static void printMessages(HttpServletResponse response,
 			ArrayList<Message> messages) throws IOException {
 		HashMap<String, LinkedList<Message>> map = new HashMap<String, LinkedList<Message>>();

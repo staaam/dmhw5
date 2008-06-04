@@ -1,7 +1,5 @@
 package dmhw.servlet;
 
-
-
 import java.io.IOException;
 
 //import javax.jcr.Repository;
@@ -12,14 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dmhw.model.*;
-import dmhw.registration.RegistrationService;
-import dmhw.registration.RegistrationServiceService;
-import dmhw.registration.RegistrationServiceServiceLocator;
+//import dmhw.registration.RegistrationService;
+//import dmhw.registration.RegistrationServiceService;
+//import dmhw.registration.RegistrationServiceServiceLocator;
 
-
-/**
- * Controller class which is used as the base class for all controller servlets
- */
 abstract public class ControllerServlet extends javax.servlet.http.HttpServlet implements javax.servlet.Servlet{
 	
 	@Override
@@ -38,17 +32,12 @@ abstract public class ControllerServlet extends javax.servlet.http.HttpServlet i
 //		}
 	}
 
-	/** 
-	 * Method which handles the GET method requests
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 		// Delegate the work to doPost(HttpServletRequest request, HttpServletResponse response) method
 		doPost(request,response);
 	} 
 	
 	protected void responseMessage(HttpServletRequest request,HttpServletResponse response, String title, String message, String URLText, String URL) throws ServletException, IOException{
-		
 		//set the attributes which are required by user messae page
 		request.setAttribute("msgTitle", title);
 		request.setAttribute("msgBody", message);
@@ -58,7 +47,10 @@ abstract public class ControllerServlet extends javax.servlet.http.HttpServlet i
 		//forward the request to user massage page
         RequestDispatcher requestDispatcher = this.getServletContext().getRequestDispatcher(Pages.message);
         requestDispatcher.forward(request, response);
-		
 	}
 
+	protected User getUser(HttpServletRequest request) {
+		String username = (String)request.getSession().getAttribute("username");
+		return Utils.isNullOrEmpty(username) ? User.GUEST : UserManager.getUser(username);
+	}
 }
