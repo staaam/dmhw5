@@ -1,35 +1,31 @@
 package dmhw.model;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Properties;
 
 import javax.servlet.ServletContext;
+
+import snaq.db.ConnectionPool;
+import snaq.db.ConnectionPoolManager;
 
 public class DB {
 	private static DB db = null;
 
-	private Connection con = null;
-	private Statement stmt = null;
-	
-	private String user;
-	private String password;
-	private String url;
+	private long timeout = 5000;  // 2 second timeout
+	private static ConnectionPool pool;
 	
 	public static void init(ServletContext servletContext) {
 		if (db == null)
 			try {
-				db = new DB(servletContext.getRealPath("/") + "/WEB-INF");
+				db = new DB(servletContext);
 				try {
-//					db.deleteTables();
-//					db.constructTables();
+					db.deleteTables();
+					db.constructTables();
 				}
 				catch (Exception e) {
 				}
@@ -43,22 +39,9 @@ public class DB {
 		return db;
 	}
 	
-	private DB(String webinf) throws ClassNotFoundException, FileNotFoundException, IOException, SQLException {
-		Class.forName("com.mysql.jdbc.Driver");
-		readConfiguration(webinf + "/db.properties");
-
-		con = DriverManager.getConnection(url, user, password);
-		stmt = con.createStatement();
-	}
-	
-	private void readConfiguration(String filename) throws IOException {
-		Properties props = new Properties();
-		props.load(new FileInputStream(filename));
-		user = props.getProperty("DBServer.user");
-		password = props.getProperty("DBServer.password");
-		url = "jdbc:mysql://" + props.getProperty("DBServer.host") + ":"
-				+ props.getProperty("DBServer.port") + "/"
-				+ props.getProperty("DBServer.database");
+	private DB(ServletContext servletContext) throws IOException {
+		String dbConfig = servletContext.getRealPath("/") + "/WEB-INF/db.properties";
+		pool = ConnectionPoolManager.getInstance(new File(dbConfig)).getPool("local");
 	}
 	
 	public void constructTables() {
@@ -116,14 +99,6 @@ public class DB {
 //		poseUpdate("DELETE FROM "+TypesTable.TableName);
 	}
 	
-	public void poseUpdate(String query) {
-		try {
-			stmt.executeUpdate(query);
-		} catch (SQLException e) {
-			print(e);
-		}
-	}
-	
 	private static void print(Exception e) {
 		System.err.println("Exception message: "+e.getMessage());
 		System.err.println("The stack trace:");
@@ -162,36 +137,76 @@ public class DB {
 //		public static final String TypeName = "TypeName";
 //	}
 	
-	public ResultSet executeQuery(String query) throws SQLException {
+	public void poseUpdate(String query) {
+		Connection con = null;
+		Statement stmt = null;
 		try {
+			con = pool.getConnection(timeout);
+			stmt = con.createStatement();
+			stmt.executeUpdate(query);
+		}
+		catch (SQLException e) {
+			print(e);
+		}
+		finally {
+			close(stmt);
+			close(con);
+		}
+	}
+	
+	public ResultSet executeQuery(String query) throws SQLException {
+		Connection con = null;
+		Statement stmt = null;
+		try {
+			con = pool.getConnection(timeout);
+			stmt = con.createStatement();
 			return stmt.executeQuery(query);
-		} catch (SQLException e) {
+		}
+		catch (SQLException e) {
 			print(e);
 			throw e;
 		}
+		finally {
+			close(stmt);
+			close(con);
+		}
 	}
 
-	public PreparedStatement prepareStatement(String s) throws SQLException {
+	public PreparedStatement prepareStatement(String s) {
+		Connection con = null;
 		try {
+			con = pool.getConnection(timeout);
 			return con.prepareStatement(s);
-		} catch (SQLException e) {
+		}
+		catch (SQLException e) {
 			print(e);
+			close(con);
 			return null;
 		}
 	}
 
 	public void execute(PreparedStatement pstmt) {
-		try {
-			pstmt.execute();
-		} catch (Exception e) {
-			print(e);
-		} finally {
-			if (pstmt != null)
-				try {
-					pstmt.close();
-				} catch (SQLException e) {
-					print(e);
-				}
-		}
+		try { pstmt.execute(); }
+		catch (Exception e) { print(e); }
+		finally { close(pstmt); }
+	}
+
+	public void close(ResultSet o) {
+		try { o.close(); }
+		catch (Exception e) { print(e); }
+		try { close(o.getStatement()); }
+		catch (Exception e) { print(e); }
+	}
+
+	public void close(Statement o) {
+		try { o.close(); }
+		catch (Exception e) { print(e); }
+		try { close(o.getConnection()); }
+		catch (Exception e) { print(e); }
+	}
+
+	public void close(Connection o) {
+		try { o.close(); }
+		catch (Exception e) { print(e); }
 	}
 }

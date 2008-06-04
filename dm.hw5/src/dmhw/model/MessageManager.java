@@ -10,6 +10,7 @@ import dmhw.model.DB.MessagesTable;
 import dmhw.model.DB.UsersTable;
 
 public class MessageManager {
+	private final static DB db = DB.getInstance();
 
 	public static ArrayList<Message> getByUser(User user) {
 		return searchMessages(null, user.getRank(), new Date().getTime(), user.getType()); 
@@ -17,16 +18,15 @@ public class MessageManager {
 
 	private static ArrayList<Message> getMessages(String query) {
 		ArrayList<Message> m = new ArrayList<Message>();
+		ResultSet rs = null;
 		try {
-			ResultSet rs = DB.getInstance().executeQuery(query);
+			rs = db.executeQuery(query);
 			
-			while (rs.next()) {
+			while (rs.next())
 				m.add(makeMessage(rs));
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
+		catch (SQLException e) { e.printStackTrace(); }
+		finally { db.close(rs); }
 		return m;
 	}
 
@@ -44,6 +44,7 @@ public class MessageManager {
 	}
 	
 	private static void listMessages() {
+		ResultSet rs = null;
 		try {
 			long now = new Date().getTime();
 			System.out.println("now: " + now);
@@ -51,7 +52,7 @@ public class MessageManager {
 					+ MessagesTable.TableName + " JOIN " + UsersTable.TableName
 					+ " ON " + MessagesTable.TableName+"."+MessagesTable.UserId + "="+UsersTable.TableName+"."+UsersTable.UserId;
 			
-			ResultSet rs = DB.getInstance().executeQuery(q);
+			rs = db.executeQuery(q);
 			
 			while (rs.next()) {
 				Message m = makeMessage(rs); 
@@ -59,15 +60,15 @@ public class MessageManager {
 						m.getTitle(), m.getAuthor(),
 						m.getType(), m.getRank(), m.getBody()));
 			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
+		catch (SQLException e) { e.printStackTrace(); }
+		finally { db.close(rs); }
 	}
 
 	public static void addMessage(Message msg) {
+		PreparedStatement pstmt = null;
 		try {
-			PreparedStatement pstmt = DB.getInstance().prepareStatement(
+			pstmt = db.prepareStatement(
 					"INSERT INTO "+MessagesTable.TableName+"("
 					+ MessagesTable.Title + ","
 					+ MessagesTable.Type + ","
@@ -84,38 +85,36 @@ public class MessageManager {
 			pstmt.setLong(5, msg.getEndTime().getTime());
 			pstmt.setString(6, msg.getBody());
 			pstmt.setInt(7, UserManager.getUserId(msg.getAuthor()));
-			DB.getInstance().execute(pstmt);
+			db.execute(pstmt);
 			
 			listMessages();
-		} catch (SQLException e) {
 		}
+		catch (SQLException e) { e.printStackTrace(); }
+		finally { db.close(pstmt); }
 	}
 
 	public static Message getMessage(int msgid) {
+		ResultSet rs = null;
 		try {
 			String q = "SELECT "+MessagesTable.TableName+".*,"+UsersTable.Username+" FROM "
 			+ MessagesTable.TableName + " JOIN " + UsersTable.TableName
 			+ " ON " + MessagesTable.TableName+"."+MessagesTable.UserId + "="+UsersTable.TableName+"."+UsersTable.UserId
 			+ " WHERE "
 			+ MessagesTable.MsgId + "=" + msgid;
-			ResultSet rs = DB.getInstance().executeQuery(q);
+			rs = db.executeQuery(q);
 				
 			if (rs.next())
 				return makeMessage(rs);
 		}
-		catch (Exception e) {
-		}
+		catch (SQLException e) { e.printStackTrace(); }
+		finally { db.close(rs); }
 		return null;
 	}
 
 	public static void deleteMessage(int msgid) {
-		try {
-			String q = "DELETE FROM "+MessagesTable.TableName
-			+ " WHERE " + MessagesTable.MsgId + "=" + msgid;
-			DB.getInstance().poseUpdate(q);
-		}
-		catch (Exception e) {
-		}
+		String q = "DELETE FROM "+MessagesTable.TableName
+				+ " WHERE " + MessagesTable.MsgId + "=" + msgid;
+		db.poseUpdate(q);
 	}
 
 	public static ArrayList<Message> searchMessages(String[] keywords, int rank, long time) {

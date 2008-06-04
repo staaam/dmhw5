@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import dmhw.model.DB.UsersTable;
 
 public class UserManager {
+	private final static DB db = DB.getInstance();
 	
 	public static boolean login(String username, String password) {
 		User u = getUser(username);
@@ -28,8 +29,9 @@ public class UserManager {
 	}
 
 	public static void addUser(User user) {
+		PreparedStatement pstmt = null;
 		try {
-			PreparedStatement pstmt = DB.getInstance().prepareStatement(
+			pstmt = db.prepareStatement(
 					"INSERT INTO "+UsersTable.TableName+"("
 					+ UsersTable.Username + ","
 					+ UsersTable.Type + ","
@@ -40,29 +42,31 @@ public class UserManager {
 			pstmt.setString(2, user.getType());
 			pstmt.setInt(3, user.getRank());
 			pstmt.setString(4, user.getPassword());
-			DB.getInstance().execute(pstmt);
+			db.execute(pstmt);
 			
 			listUsers();
-		} catch (SQLException e) {
 		}
+		catch (SQLException e) { e.printStackTrace(); }
+		finally { db.close(pstmt); }
 	}
 
 	private static void listUsers() {
+		ResultSet rs = null;
 		try {
-			ResultSet rs = DB.getInstance().executeQuery("SELECT * FROM "+UsersTable.TableName);
+			rs = db.executeQuery("SELECT * FROM "+UsersTable.TableName);
 			while (rs.next()) {
 				User u = makeUser(rs);
 				System.out.println(String.format("user: %s, type %s, rank %d, password %s", u.getUsername(), u.getType(), u.getRank(), u.getPassword()));
 			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
+		catch (SQLException e) { e.printStackTrace(); }
+		finally { db.close(rs); }
 	}
 
 	public static User getUser(String username) {
+		ResultSet rs = null;
 		try {
-			ResultSet rs = DB.getInstance().executeQuery(String.format(
+			rs = db.executeQuery(String.format(
 					"SELECT * FROM "+UsersTable.TableName+" WHERE %s='%s'",
 					UsersTable.Username, username
 					));
@@ -71,9 +75,9 @@ public class UserManager {
 				return null;
 		
 			return makeUser(rs);
-		} catch (SQLException e) {
-			e.printStackTrace();
 		}
+		catch (SQLException e) { e.printStackTrace(); }
+		finally { db.close(rs); }
 		return null;
 	}
 

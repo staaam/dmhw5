@@ -1,7 +1,6 @@
 package dmhw.model;
 
 import java.text.DateFormat;
-import java.text.DateFormatSymbols;
 import java.util.Date;
 
 public class Message {

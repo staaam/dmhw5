@@ -7,8 +7,8 @@
 <body>
 <form name="login" action="login" method="post">
 <table>
-<tr><td align="left">Login:</td><td><input name="username" type="text"/></td></tr>
-<tr><td align="left">Password:</td><td><input name="password" type="password"></td></tr>
+<tr><td align="left">Login:</td><td><input name="username" type="text" value="guest"/></td></tr>
+<tr><td align="left">Password:</td><td><input name="password" type="password" value="guest"/></td></tr>
 <tr><td colspan="2"><input name="submit" type="submit" value="Login"/></td></tr>
 </table>
 </form>
