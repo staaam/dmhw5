@@ -36,12 +36,14 @@ public class UserManager {
 					+ UsersTable.Username + ","
 					+ UsersTable.Type + ","
 					+ UsersTable.Rank + ","
-					+ UsersTable.Password
-					+ ")"+" VALUES (?,?,?,?)");
+					+ UsersTable.Password + ","
+					+ UsersTable.Guest
+					+ ")"+" VALUES (?,?,?,?,?)");
 			pstmt.setString(1, user.getUsername());
 			pstmt.setString(2, user.getType());
 			pstmt.setInt(3, user.getRank());
 			pstmt.setString(4, user.getPassword());
+			pstmt.setBoolean(5, user.isGuest());
 			db.execute(pstmt);
 			
 			listUsers();
@@ -56,7 +58,7 @@ public class UserManager {
 			rs = db.executeQuery("SELECT * FROM "+UsersTable.TableName);
 			while (rs.next()) {
 				User u = makeUser(rs);
-				System.out.println(String.format("user: %s, type %s, rank %d, password %s", u.getUsername(), u.getType(), u.getRank(), u.getPassword()));
+				System.out.println(String.format("user: %s, type %s, rank %d, password %s, guest %b", u.getUsername(), u.getType(), u.getRank(), u.getPassword(), u.isGuest()));
 			}
 		}
 		catch (SQLException e) { e.printStackTrace(); }
@@ -86,6 +88,7 @@ public class UserManager {
 				rs.getString(UsersTable.Username),
 				rs.getString(UsersTable.Password),
 				rs.getString(UsersTable.Type),
-				rs.getInt(UsersTable.Rank));
+				rs.getInt(UsersTable.Rank),
+				rs.getBoolean(UsersTable.Guest));
 	}
 }

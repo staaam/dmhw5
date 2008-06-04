@@ -1,23 +1,28 @@
 package dmhw.model;
 
 public class User {
+	public static final String GUEST_NAME = "guest";
+	public static final User GUEST = new User(GUEST_NAME, GUEST_NAME, "", 1, true);
+	
 	private int id = -1;
 	private String username;
 	private String password;
 	private String type;
 	private Integer rank;
+	private boolean isGuest;
 	
-	public User(String username, String password, String type, Integer rank) {
-		this(-1, username, password, type, rank);
+	public User(String username, String password, String type, Integer rank, boolean isGuest) {
+		this(-1, username, password, type, rank, isGuest);
 	}
 
-	public User(int id, String username, String password, String type, Integer rank) {
+	public User(int id, String username, String password, String type, Integer rank, boolean isGuest) {
 		super();
 		this.id = id; 
 		this.username = username;
 		this.password = password;
 		this.type = type;
 		this.rank = rank;
+		this.isGuest = isGuest;
 	}
 	
 	public int getId() {
@@ -57,6 +62,10 @@ public class User {
 
 	public void setRank(Integer rank) {
 		this.rank = rank;
+	}
+
+	public boolean isGuest() {
+		return isGuest;
 	}
 	
 }
