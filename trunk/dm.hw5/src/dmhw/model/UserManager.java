@@ -29,6 +29,8 @@ public class UserManager {
 	}
 
 	public static void addUser(User user) {
+		if (user == null)
+			return;
 		PreparedStatement pstmt = null;
 		try {
 			pstmt = db.prepareStatement(

@@ -9,7 +9,6 @@
 <table>
 <tr><td align="left">Login:</td><td><input name="username" type="text" value=""/></td></tr>
 <tr><td align="left">Password:</td><td><input name="password" type="password" value=""/></td></tr>
-<tr><td align="left">Full access:</td><td><input type="checkbox" name="full_access" value="1" checked="checked"/></td></tr>
 <tr><td colspan="2"><input name="submit" type="submit" value="Login"/></td></tr>
 </table>
 </form>

@@ -2,7 +2,7 @@ package dmhw.model;
 
 public class User {
 	public static final String GUEST_NAME = "guest";
-	public static final User GUEST = new User(GUEST_NAME, GUEST_NAME, "", 1, true);
+	public static final User GUEST = new User(GUEST_NAME, GUEST_NAME, GUEST_NAME, 1, true);
 	
 	private int id = -1;
 	private String username;
