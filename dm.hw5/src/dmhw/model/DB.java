@@ -24,8 +24,8 @@ public class DB {
 			try {
 				db = new DB(servletContext);
 				try {
-//					db.deleteTables();
-//					db.constructTables();
+					//db.deleteTables();
+					//db.constructTables();
 				}
 				catch (Exception e) {
 				}
@@ -59,8 +59,8 @@ public class DB {
 //				+ UsersTable.TypeId + " INT NOT NULL, "
 				+ UsersTable.Type + " VARCHAR(15) NOT NULL, "
 				+ UsersTable.Rank + " INT NOT NULL, "
-				+ UsersTable.Password + " VARCHAR(255) NOT NULL"
-				+ UsersTable.Guest + "BOOL NOT NULL"
+				+ UsersTable.Password + " VARCHAR(255) NOT NULL, "
+				+ UsersTable.Guest + " BOOLEAN NOT NULL "
 				+ ")"
 //				+ " UNIQUE ( " + UsersTable.Username + " ) "
 ////				+ " FOREIGN KEY ( " + UsersTable.TypeId + " ) "
