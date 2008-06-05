@@ -15,7 +15,7 @@ public class DeleteMessageControllerServlet extends ControllerServlet {
 		try {
 			User user = getUser(request);
 			if (user.isGuest()) {
-				this.responseMessage(request, response, "No permissions", "Guests are not allowed to modify content", "return", Pages.boardView);
+				simpleErrRespone(response, "Guests are not allowed to modify content");
 				return;
 			}
 			
@@ -23,16 +23,16 @@ public class DeleteMessageControllerServlet extends ControllerServlet {
 			
 			Message message = MessageManager.getMessage(msgid);
 			if (message == null) {
-				this.responseMessage(request, response, "Message not exists", "Specified message already not exists", "return", Pages.boardView);
+				simpleErrRespone(response, "Specified message already not exists");
 			}
 			if (message.getRank() > user.getRank()) {
-				this.responseMessage(request, response, "No permissions", "You don't have permissions to remove this message", "return", Pages.boardView);
+				simpleErrRespone(response, "Your rank is not enough to delete this message");
 			}
 			if (!message.getAuthor().equals(user.getUsername())) {
-				this.responseMessage(request, response, "No permissions", "You didn't wrote this message", "return", Pages.boardView);
+				simpleErrRespone(response, "You didn't wrote this message");
 			}
 			MessageManager.deleteMessage(msgid);
-			this.responseMessage(request, response, "Deleted successfully", "The message was deleted successfully", "return", Pages.boardView);
+			simpleOkRespone(response, "The message was deleted successfully");
 		} catch (Exception e) {
 			this.internalError(request, response, e);
 		}

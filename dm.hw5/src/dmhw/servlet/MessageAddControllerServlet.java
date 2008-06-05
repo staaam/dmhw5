@@ -15,7 +15,7 @@ public class MessageAddControllerServlet extends ControllerServlet {
 		try {
 			User user = getUser(request);
 			if (user.isGuest()) {
-				this.responseMessage(request, response, "No permissions", "Guests are not allowed to modify content", "return", Pages.boardView);
+				simpleErrRespone(response, "Guests are not allowed to modify content");
 				return;
 			}
 	
@@ -23,11 +23,11 @@ public class MessageAddControllerServlet extends ControllerServlet {
 			String type = request.getParameter("type");
 			
 			if (Utils.isNullOrEmpty(type)) {
-				this.responseMessage(request, response, "Type is empty", "Type should be non empty string", "Try another type", Pages.newmessage);
+				simpleErrRespone(response, "Type should be non empty string");
 				return;
 			}
 			if (type.length() > 15) {
-				this.responseMessage(request, response, "Type is too long", "Type length should be less or equal that 15", "Try another type", Pages.newmessage);
+				simpleErrRespone(response, "Type length should be less or equal that 15");
 				return;
 			}
 	
@@ -48,7 +48,7 @@ public class MessageAddControllerServlet extends ControllerServlet {
 			
 			MessageManager.addMessage(msg);
 			
-			this.responseMessage(request, response, "Message Added Successful ", "Your have been posted successfully", "go back to login page", Pages.index);
+			simpleOkRespone(response, "Your message has been posted successfully");
 		} catch (Exception e) {
 			internalError(request, response, e);
 		}

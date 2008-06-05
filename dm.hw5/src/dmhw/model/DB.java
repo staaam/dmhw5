@@ -16,15 +16,14 @@ import snaq.db.ConnectionPoolManager;
 public class DB {
 	private static DB db = null;
 
-	private long timeout = 0;  // no timeout
+	private long timeout = 10000;  // 10 seconds timeout
 	private static ConnectionPool pool;
 	
 	public static void init(ServletContext servletContext) {
 		if (db == null)
 			try {
 				db = new DB(servletContext);
-//				db.deleteTables();
-//				db.constructTables();
+				//db.recreate();
 			}
 			catch (Exception e) {
 				print(e);
@@ -41,7 +40,7 @@ public class DB {
 		pool.init(10);
 	}
 	
-	public void constructTables() throws SQLException {
+	public void constructTables() {
 //		poseUpdate(
 //				"CREATE TABLE " + TypesTable.TableName + " ("
 //				+ TypesTable.TypeId + " INT NOT NULL AUTO_INCREMENT PRIMARY KEY, "
@@ -88,7 +87,7 @@ public class DB {
 		catch (SQLException e) { print(e); }
 	}
 	
-	public void deleteTables() throws SQLException {
+	public void deleteTables() {
 		try { poseUpdate("DROP TABLE "+MessagesTable.TableName); }
 		catch (SQLException e) { print(e); }
 		try { poseUpdate("DROP TABLE "+UsersTable.TableName); }
@@ -151,7 +150,7 @@ public class DB {
 		Connection con = null;
 		Statement stmt = null;
 		try {
-			con = pool.getConnection(timeout);
+			con = getConnection();
 			stmt = con.createStatement();
 			stmt.executeUpdate(query);
 		}
@@ -161,10 +160,14 @@ public class DB {
 		}
 	}
 	
+	private Connection getConnection() throws SQLException {
+		return pool.getConnection(timeout);
+	}
+
 	public ResultSet executeQuery(String query) throws SQLException {
 		Connection con = null;
 		Statement stmt = null;
-		con = pool.getConnection(timeout);
+		con = getConnection();
 		stmt = con.createStatement();
 		return stmt.executeQuery(query);
 	}
@@ -172,7 +175,7 @@ public class DB {
 	public PreparedStatement prepareStatement(String s) throws SQLException {
 		Connection con = null;
 		try {
-			con = pool.getConnection(timeout);
+			con = getConnection();
 			return con.prepareStatement(s);
 		}
 		catch (SQLException e) {
@@ -202,7 +205,12 @@ public class DB {
 	}
 
 	public void close(Connection o) {
-//		try { o.close(); }
-//		catch (Exception e) {}
+		try { o.close(); }
+		catch (Exception e) {}
+	}
+
+	public void recreate() {
+		db.deleteTables();
+		db.constructTables();
 	}
 }
