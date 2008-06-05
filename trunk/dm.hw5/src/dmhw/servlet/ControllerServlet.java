@@ -2,6 +2,7 @@ package dmhw.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.sql.SQLException;
 
 //import javax.jcr.Repository;
@@ -39,7 +40,7 @@ abstract public class ControllerServlet extends javax.servlet.http.HttpServlet i
 		doPost(request,response);
 	} 
 	
-	protected void responseMessage(HttpServletRequest request,HttpServletResponse response, String title, String message, String URLText, String URL) throws ServletException, IOException{
+	private void responseMessage(HttpServletRequest request,HttpServletResponse response, String title, String message, String URLText, String URL) throws ServletException, IOException{
 		//set the attributes which are required by user messae page
 		request.setAttribute("msgTitle", title);
 		request.setAttribute("msgBody", message);
@@ -62,10 +63,36 @@ abstract public class ControllerServlet extends javax.servlet.http.HttpServlet i
 
 	protected void internalError(HttpServletRequest request,HttpServletResponse response, Exception e) {
 		e.printStackTrace();
-		try {
-			response.setStatus(500);
-			e.printStackTrace( new PrintWriter(  response.getOutputStream() ));
-		} catch (IOException e1) {
-		}
+		simpleErrRespone(response, e.toString());
 	}
+	
+	protected void simpleErrRespone(HttpServletResponse response, String msg) {
+		simpleRespone(response, false, "<msg>" + msg + "</msg>");
+	}
+
+	protected void simpleOkRespone(HttpServletResponse response, String msg) {
+		simpleRespone(response, true, "<msg>" + msg + "</msg>");
+	}
+
+	protected void simpleOkRespone(HttpServletResponse response) {
+		simpleRespone(response, true, null);
+	}
+
+	protected void simpleRespone(HttpServletResponse response, boolean success, String more) {
+		try {
+			response.setContentType("text/xml");
+			PrintWriter out = response.getWriter();
+			out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			out.println("<response>");
+			out.println("<result>" + success + "</result>");
+			if (more != null)
+				out.println(more);
+			out.println("</response>");
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	} 
+ 	  	    
+
 }

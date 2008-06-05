@@ -1,6 +1,7 @@
 package dmhw.servlet;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -8,12 +9,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import dmhw.model.*;
 
-public class LogoutControllerServlet extends ControllerServlet {
+public class AdminControllerServlet extends ControllerServlet {
 	private static final long serialVersionUID = -6122606456722720455L;
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.getSession().invalidate();
-		//this.responseMessage(request, response, "Logout", "You have been successfully log out from the system", "go back to login page", Pages.index);
-		simpleOkRespone(response);
+		String action = request.getParameter("action");
+		if (action.equals("recreatedb")) {
+			DB.getInstance().recreate();
+			return;
+		}
 	}   	  	      	  	    
 }

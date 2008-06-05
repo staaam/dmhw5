@@ -3,7 +3,6 @@
 <xsl:template match="/">
   <html>
   <head>
-  	<link href="messages.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
   <div class="msgs">
