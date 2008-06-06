@@ -1,5 +1,6 @@
 package dmhw.servlet;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -8,6 +9,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,14 +29,14 @@ public class BoardViewControllerServlet extends ControllerServlet {
 			} catch (SQLException e) {
 			}
 			
-			BoardViewControllerServlet.printMessages(response, messages);
+			BoardViewControllerServlet.printMessages(response, messages, user, getServletContext());
 		} catch (Exception e) {
 			internalError(request, response, e);
 		}		
 	}
 
 	public static void printMessages(HttpServletResponse response,
-			ArrayList<Message> messages) throws IOException {
+			ArrayList<Message> messages, User user, ServletContext servletContext) throws IOException {
 		HashMap<String, LinkedList<Message>> map = new HashMap<String, LinkedList<Message>>();
 		if (messages != null)
 			for (Message m : messages) {
@@ -47,7 +49,7 @@ public class BoardViewControllerServlet extends ControllerServlet {
 		response.setContentType("text/xml");
 	    PrintWriter out = response.getWriter();
 	    out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-	    out.println("<?xml-stylesheet type=\"text/xsl\" href=\"messages.xsl\"?>");
+	    out.println("<?xml-stylesheet type=\"text/xsl\" href=\""+getUserXSL(user, servletContext)+"\"?>");
 	    out.println("<messages>");
 	    for (String t : map.keySet()) {
 			out.println("<message_list>");
@@ -58,5 +60,13 @@ public class BoardViewControllerServlet extends ControllerServlet {
 			out.println("</message_list>");
 	    }
 	    out.println("</messages>");
+	}
+
+	private static String getUserXSL(User user, ServletContext sc) {
+		String fn = "/custom/"+user.getUsername()+".xsl";
+		File f = new File(sc.getRealPath(fn));
+		if (f.exists())
+			return fn;
+		return "messages.xsl";
 	}   	
 }

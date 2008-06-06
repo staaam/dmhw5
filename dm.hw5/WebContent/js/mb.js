@@ -3,6 +3,21 @@ function newMessage() {
 	setEl(gel('main'), gel('newMessage'));
 }
 
+function login() {
+	setText(gel('loginError'), '');
+	setEl(gel('main'), gel('login'));
+}
+
+function administer() {
+	setText(gel('adminStatus'), '');
+	setEl(gel('main'), gel('admin'));
+}
+
+function adminAct(act) {
+	if (!act) return;
+	request2('admin', 'action='+act, 'GET', gel('adminStatus'));
+}
+
 function postMessage(target) {
     if (!target) return;
 
@@ -49,7 +64,20 @@ function doLocalSearch(target) {
 }
 
 function sharedSearch() {
-	setText(gel('sharedSearchError'), '');
+	var err = gel('sharedSearchError');
+	setText(err, '');
+	gel('endpointsList').innerHTML = "";
+	request2('sharedsearch','getendpoints=1','GET', err, function (xml) {
+		var epl = gel('endpointsList');
+		var els = xml.getElementsByTagName('endpoint');
+		var html = "";
+		for (var i=0; i<els.length; i++) {
+			var el = els[i];
+			var ep = el.firstChild.data;
+			html += '<input type="checkbox" name="endpoints" value="'+ep+'" checked="checked"/>'+ep+'<br/>';
+		}
+		gel('endpointsList').innerHTML = html;		
+	});
 	setEl(gel('main'), gel('sharedSearch'));
 }
 
@@ -167,7 +195,7 @@ function doRegister(target) {
 
 // LOGIN/LOGOUT SECTION BEGIN
 function loginUpdate() {
-	var id = username ? 'loggedin' : 'login';
+	var id = 'logged' + (username ? 'in' : 'out');
 	setText(gel("user"), username ? username : "guest");
 	gel('prefs_menu').style.display = username ? 'block' : 'none';
 	setEl(gel('login_status'), gel(id));
@@ -199,30 +227,39 @@ function setLogin(success, un) {
 }
 // LOGIN/LOGOUT SECTION END
 function request(url, params, method, callback) {
+	if (params && method == 'GET') {
+		url = url + '?' + params;
+		params = null;
+	}
+
     /* Set up the request */
     var xmlhttp =  new XMLHttpRequest();
     xmlhttp.open(method, url, true);
     
     /* The callback function */
     xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == 4)
+        if (xmlhttp.readyState == 4) {
             if (xmlhttp.status == 200)
             	callback(xmlhttp.responseXML);
+        }
     }
     
-    /* Send the POST request */
-    if (params) {
-    	xmlhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    	xmlhttp.send(params);
+    if (params && method == 'POST') {
+	    /* Send the POST request */
+	   	xmlhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+	   	xmlhttp.send(params);
     } else 
     	xmlhttp.send(null);
 }
 
 function request2(url, params, method, errEl, callback) {
 	request(url, params, method, function (xml) {
-    		if (getResult(xml) == "true")
-				callback(xml);
-			else
+    		if (getResult(xml) == "true") {
+    			if (callback)
+					callback(xml);
+				else 
+					setText(errEl, "Success"); 
+			} else
 				setText(errEl, getMsg(xml));				
     	});    
 }

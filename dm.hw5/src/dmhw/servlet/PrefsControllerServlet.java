@@ -25,10 +25,10 @@ public class PrefsControllerServlet extends ControllerServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			User user = getUser(request);
-//			if (user == User.GUEST) {
-//				this.simpleErrRespone(response, "You should be logged in to do so");
-//				return;
-//			}
+			if (user == User.GUEST) {
+				this.simpleErrRespone(response, "You should be logged in to do so");
+				return;
+			}
 			if (ServletFileUpload.isMultipartContent(request)){
 				ServletFileUpload fu = new ServletFileUpload(new DiskFileItemFactory());
 				List fileItemsList = fu.parseRequest(request);
@@ -38,7 +38,7 @@ public class PrefsControllerServlet extends ControllerServlet {
 						String fn = fileItem.getFieldName();
 						if ("css".equals(fn) || "xsl".equals(fn)) {
 							
-							writeFile(getServletContext().getRealPath("\\custom\\"+user.getUsername()+"."+fn), fileItem.getInputStream());
+							writeFile(getServletContext().getRealPath("/custom/"+user.getUsername()+"."+fn), fileItem.getInputStream());
 						}
 					}
 				}
@@ -59,5 +59,6 @@ public class PrefsControllerServlet extends ControllerServlet {
 		 
 		inputStream.close();
 		outputStream.close();
-	}   	  	      	  	    
+	}
+ 	      	  	    
 }

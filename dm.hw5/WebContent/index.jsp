@@ -1,8 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<%@ page import='dmhw.registration.RegistrationService' %>
-<%@ page import='dmhw.registration.RegistrationServiceService' %>
-<%@ page import='dmhw.registration.RegistrationServiceServiceLocator' %>
 <%@ taglib uri='http://java.sun.com/jstl/core' prefix='c'%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"
@@ -29,6 +26,7 @@
 	<a href="#" class="menu_item" onclick="localSearch()">Local Search</a>
 	<a href="#" class="menu_item" onclick="sharedSearch()">Shared Search</a>
 	<a href="#" id='prefs_menu' class="menu_item" onclick="showPrefs()">Preferences</a>
+	<a href="#" class="menu_item" onclick="administer()">Administer</a>
 </div>
 <div id="login_status"></div>
 <div id="main_top" class="top_d">
@@ -45,15 +43,20 @@
 </div>
 
 <div id="all_divs" style="visibility:hidden">
+<div id="admin">
+	<div id="adminStatus" class="error"></div>
+	<a href="#" onclick="adminAct('recreatedb');">Recreate DB</a><br/>
+	<a href="#" onclick="adminAct('register');">Register Service</a><br/>
+	<a href="#" onclick="adminAct('unregister');">UnRegister Service</a><br/>
+</div>
 <div id="prefs">
 	<form enctype='multipart/form-data' action='setprefs' method='post'>
 	<table>
 	<tr><td colspan="2"><div id="uploadStatus"></div></td></tr>
 	<tr>
-	<td>Custom CSS</td><td><input name='css' type='file' /></td>
+<!--	<td>Custom CSS</td><td><input name='css' type='file' /></td> -->
 	<td>Custom XSL</td><td><input name='xsl' type='file' /></td>
-	<td colspan="2"><input type='submit' value='Upload'/></td>
-	<!--  onclick="setPrefs(this); return false" -->
+	<td colspan="2"><input type='submit' value='Upload' onclick="setPrefs(this); return false"/></td>
 	</tr>
 	</table>
 	</form>
@@ -81,6 +84,10 @@
 		</tr>
 	</table>
 	</form>
+</div>
+<div id="loggedout">
+	You're not logged in.
+	<a href="#" onclick="login();">Login now</a>
 </div>
 <div id="loggedin">
 	You're logged in as <span id="user">&nbsp;</span>.
@@ -186,13 +193,8 @@
 </form>
 </div>
 <div id="sharedSearch">
-<% RegistrationServiceService rss = new RegistrationServiceServiceLocator(); %>
-<% RegistrationService rs = rss.getEndpointsRegistration(); %>
-<% request.setAttribute("endpoints", rs.getRegisteredEndpoints()); %>
 <form>
-<c:forEach items="${endpoints}" var="ep">
-	<input type="checkbox" name="endpoints" value="${ep}" checked="checked"/>${ep}<br/>
-</c:forEach>
+<div id="endpointsList"></div>
 <table>
 	<tr>
 		<td colspan="2"><span id='sharedSearchError' class="error"></span></td>
