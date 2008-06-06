@@ -40,18 +40,6 @@ abstract public class ControllerServlet extends javax.servlet.http.HttpServlet i
 		doPost(request,response);
 	} 
 	
-	private void responseMessage(HttpServletRequest request,HttpServletResponse response, String title, String message, String URLText, String URL) throws ServletException, IOException{
-		//set the attributes which are required by user messae page
-		request.setAttribute("msgTitle", title);
-		request.setAttribute("msgBody", message);
-		request.setAttribute("urlText", "go back to "+ URLText);
-		request.setAttribute("url","." + URL);	
-		
-		//forward the request to user massage page
-        RequestDispatcher requestDispatcher = this.getServletContext().getRequestDispatcher(Pages.message);
-        requestDispatcher.forward(request, response);
-	}
-
 	protected User getUser(HttpServletRequest request) {
 		String username = (String)request.getSession().getAttribute("username");
 		try {

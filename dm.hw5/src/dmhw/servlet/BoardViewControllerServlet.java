@@ -27,14 +27,6 @@ public class BoardViewControllerServlet extends ControllerServlet {
 			} catch (SQLException e) {
 			}
 			
-			String viewtype = (String)request.getParameter("viewtype");
-			if ("html".equals(viewtype)) {
-				request.setAttribute("messages", messages);
-		        RequestDispatcher requestDispatcher = this.getServletContext().getRequestDispatcher(Pages.showMessages);
-		        requestDispatcher.forward(request, response);
-				return;
-			}
-			
 			BoardViewControllerServlet.printMessages(response, messages);
 		} catch (Exception e) {
 			internalError(request, response, e);
