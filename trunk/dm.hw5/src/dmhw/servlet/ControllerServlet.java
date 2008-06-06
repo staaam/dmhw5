@@ -63,7 +63,7 @@ abstract public class ControllerServlet extends javax.servlet.http.HttpServlet i
 
 	protected void internalError(HttpServletRequest request,HttpServletResponse response, Exception e) {
 		e.printStackTrace();
-		simpleErrRespone(response, e.toString());
+		simpleErrRespone(response, "Error occured while processing request ("+e.getMessage()+")");
 	}
 	
 	protected void simpleErrRespone(HttpServletResponse response, String msg) {

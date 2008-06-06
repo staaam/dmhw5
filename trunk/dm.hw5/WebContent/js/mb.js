@@ -6,10 +6,7 @@ function newMessage() {
 function postMessage(target) {
     if (!target) return;
 
-	var tl = target.title.value;     
     var tp = target.type.value; 
-    var rn = target.rank.value;
-    var bd = target.body.value;
     
     var err = gel('newMessageError');
     setText(err, '');
@@ -22,15 +19,7 @@ function postMessage(target) {
     	return false;
     }
     
-    request2(
-    	'newmessage',
-    	'title='    + escape(tl) + '&' +
-    	'type='     + escape(tp) + '&' +
-    	'rank='     + escape(rn) + '&' +
-    	formDate(target, "s") + '&' +
-    	formDate(target, "e") + '&' +
-    	'body='     + escape(bd)    	,
-    	'POST', err, function (xml) {
+    request2('newmessage', allElements(target), 'POST', err, function (xml) {
 			setEl(gel('main'), gel('post_ok'));
     	});
 
@@ -53,14 +42,61 @@ function localSearch() {
 	setEl(gel('main'), gel('localSearch'));
 }
 
+function doLocalSearch(target) {
+    if (!target) return;
+	showMessages('search', 'localsearch', allElements(target), 'POST');
+    return false;
+}
+
 function sharedSearch() {
 	setText(gel('sharedSearchError'), '');
 	setEl(gel('main'), gel('sharedSearch'));
 }
 
+function doSharedSearch(target) {
+    if (!target) return;
+	showMessages('search', 'sharedsearch', allElements(target), 'POST');
+    return false;
+}
+
+function allElements(form) {
+	var s = '';
+	var elem = form.elements;
+	for(var i = 0; i < elem.length; i++) {
+		if (s) s += "&";
+		
+		var e = elem[i];
+		if (e.type != 'checkbox' || e.checked)
+			s += escape(elem[i].name) + '=' + escape(elem[i].value);
+	}
+	return s; 
+}
+
+function showPrefs() {
+	setEl(gel('main'), gel('prefs'));
+}
+
+function setPrefs(target) {
+	if (!target) return;
+	
+	AIM.submit(target, {
+		'onStart' : function () {
+			setText(get('uploadStatus'), 'Uploading...');
+		},
+		'onComplete' : function (response) {
+			setText(get('uploadStatus'), 'Done');
+		}
+	});	
+}
+
+function toggle(id) {
+	var s = gel(id).style;
+	s.display = s.display == 'none' ? 'block' : 'none';
+}
+
 // BOARD VIEW BEGIN
 function boardView() {
-	showMessages('boardView', 'boardview', null, 'GET');
+	showMessages('board', 'boardview', null, 'GET');
 }
 
 function showMessages(target, url, params, method) {
@@ -80,8 +116,7 @@ function showBoard(target, xml, xslt) {
 	if (!xml || !xslt) return;
 	var html = xsltProcess(xml, xslt);
 	gel(target).innerHTML = html;
-	//gel('boardViewFrame').contentDocument = html;
-	setEl(gel('main'), gel(target));
+//	setEl(gel('main'), gel(target));
 }
 // BOARD VIEW END
 
@@ -97,8 +132,6 @@ function doRegister(target) {
     var pw = target.password.value; 
     var pw2 = target.confirm.value; 
     var tp = target.type.value; 
-    var rn = target.rank.value;
-    var fa = target.fullAccess.value;
     
     var err = gel('newuserError');
     setText(err, '');
@@ -124,14 +157,7 @@ function doRegister(target) {
     	return false;
     }
     
-    request2(
-    	'register',
-    	'username=' + escape(un) + '&' +
-    	'password=' + escape(pw) + '&' +
-    	'type='     + escape(tp) + '&' +
-    	'rank='     + escape(rn) + '&' +
-    	'full_access=' + escape(fa)    	,
-    	'POST', err, function (xml) {
+    request2('register', allElements(target), 'POST', err, function (xml) {
 			setEl(gel('main'), gel('reg_ok'));
     	});
 
@@ -157,14 +183,8 @@ function doLogout() {
 function doLogin(target) {
     if (!target) return;
     
-    var username = target.username.value;
-    var password = target.password.value;
-    
-    request2(
-    	'login',
-    	'username=' + escape(username) + '&' +
-    	'password=' + escape(password),
-    	'POST', gel('loginError'), function (xml) {
+    request2('login', allElements(target), 'POST', gel('loginError'),
+    	function (xml) {
 			setLogin("true", username);
     	});
 
