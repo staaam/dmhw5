@@ -29,7 +29,7 @@ public class LocalSearchControllerServlet extends ControllerServlet {
 			}
 	
 			ArrayList<Message> messages = MessageManager.searchMessages(keywords, Math.min(user.getRank(), rank), time, type);
-			BoardViewControllerServlet.printMessages(response, messages);
+			BoardViewControllerServlet.printMessages(response, messages, user, getServletContext());
 		} catch (Exception e) {
 			internalError(request, response, e);
 		}

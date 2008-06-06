@@ -13,9 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dmhw.model.*;
-//import dmhw.registration.RegistrationService;
-//import dmhw.registration.RegistrationServiceService;
-//import dmhw.registration.RegistrationServiceServiceLocator;
 
 abstract public class ControllerServlet extends javax.servlet.http.HttpServlet implements javax.servlet.Servlet{
 	
@@ -23,16 +20,6 @@ abstract public class ControllerServlet extends javax.servlet.http.HttpServlet i
 	public void init() throws ServletException {
 		super.init();
 		DB.init(this.getServletContext());
-//		try {
-//			RegistrationServiceService rss = new RegistrationServiceServiceLocator();
-//			RegistrationService rs = rss.getEndpointsRegistration();
-//			String[] srvs = rs.getRegisteredEndpoints();
-//			for (String s : srvs) {
-//				System.out.println(s);
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
