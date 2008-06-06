@@ -169,6 +169,7 @@ function doRegister(target) {
 function loginUpdate() {
 	var id = username ? 'loggedin' : 'login';
 	setText(gel("user"), username ? username : "guest");
+	gel('prefs_menu').style.display = username ? 'block' : 'none';
 	setEl(gel('login_status'), gel(id));
 	setText(gel('loginError'), "");
 	boardView();

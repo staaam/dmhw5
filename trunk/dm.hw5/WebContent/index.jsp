@@ -28,7 +28,7 @@
 	<a href="#" class="menu_item" onclick="boardView()">board view</a>
 	<a href="#" class="menu_item" onclick="localSearch()">Local Search</a>
 	<a href="#" class="menu_item" onclick="sharedSearch()">Shared Search</a>
-	<a href="#" class="menu_item" onclick="showPrefs()">Preferences</a>
+	<a href="#" id='prefs_menu' class="menu_item" onclick="showPrefs()">Preferences</a>
 </div>
 <div id="login_status"></div>
 <div id="main_top" class="top_d">
