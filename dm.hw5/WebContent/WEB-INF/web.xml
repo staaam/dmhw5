@@ -10,6 +10,10 @@
 	<servlet-class>dmhw.servlet.AdminControllerServlet</servlet-class>
 </servlet>
 <servlet>
+	<servlet-name>prefs</servlet-name>
+	<servlet-class>dmhw.servlet.PrefsControllerServlet</servlet-class>
+</servlet>
+<servlet>
 	<servlet-name>login</servlet-name>
 	<servlet-class>dmhw.servlet.LoginControllerServlet</servlet-class>
 </servlet>
@@ -64,6 +68,10 @@
 <servlet-mapping>
 	<servlet-name>admin</servlet-name>
 	<url-pattern>/admin</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+	<servlet-name>prefs</servlet-name>
+	<url-pattern>/setprefs</url-pattern>
 </servlet-mapping>
 <servlet-mapping>
 	<servlet-name>login</servlet-name>

@@ -16,6 +16,7 @@
 	<script src="js/ajaxslt/dom.js" type="text/javascript"></script>
 	<script src="js/ajaxslt/xpath.js" type="text/javascript"></script>
 	<script src="js/ajaxslt/xslt.js" type="text/javascript"></script>
+	<script src="js/aim.js" type="text/javascript"></script>
 	<script language="JavaScript" src="js/mb.js" type="text/javascript"></script>
 	<script language="JavaScript">
 		var username = "${username}";
@@ -23,15 +24,40 @@
 </head>
 <body onload="init()">
 <div id="menu">
-	<a href="#" onclick="newMessage()">new message</a><br />
-	<a href="#" onclick="boardView()">board view</a><br />
-	<br />
-	<a href="#" onclick="localSearch()">Local Search</a><br />
-	<a href="#" onclick="sharedSearch()">Shared Search</a><br />
+	<a href="#" class="menu_item" onclick="newMessage()">new message</a>
+	<a href="#" class="menu_item" onclick="boardView()">board view</a>
+	<a href="#" class="menu_item" onclick="localSearch()">Local Search</a>
+	<a href="#" class="menu_item" onclick="sharedSearch()">Shared Search</a>
+	<a href="#" class="menu_item" onclick="showPrefs()">Preferences</a>
 </div>
 <div id="login_status"></div>
-<div id="main"></div>
+<div id="main_top" class="top_d">
+	<div id="main_label" class="top_lbl" onclick="toggle('main');">Action</div>
+	<div id="main"></div>
+</div>
+<div id="board_top" class="top_d">
+	<div id="board_label" class="top_lbl" onclick="toggle('board');">Board View</div>
+	<div id="board"></div>
+</div>
+<div id="search_top" class="top_d">
+	<div id="search_label" class="top_lbl" onclick="toggle('search');">Search Results</div>
+	<div id="search"></div>
+</div>
+
 <div id="all_divs" style="visibility:hidden">
+<div id="prefs">
+	<form enctype='multipart/form-data' action='setprefs' method='post'>
+	<table>
+	<tr><td colspan="2"><div id="uploadStatus"></div></td></tr>
+	<tr>
+	<td>Custom CSS</td><td><input name='css' type='file' /></td>
+	<td>Custom XSL</td><td><input name='xsl' type='file' /></td>
+	<td colspan="2"><input type='submit' value='Upload'/></td>
+	<!--  onclick="setPrefs(this); return false" -->
+	</tr>
+	</table>
+	</form>
+</div>
 <div id="login">
 	<form>
 	<table>
