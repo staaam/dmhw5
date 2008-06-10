@@ -17,6 +17,7 @@ public class AdminControllerServlet extends ControllerServlet {
 	private static final long serialVersionUID = -6122606456722720455L;
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setHeader("Cache-Control", "no-cache");
 		String action = request.getParameter("action");
 		try {
 			if ("recreatedb".equals(action)) {

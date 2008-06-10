@@ -23,6 +23,7 @@ public class PrefsControllerServlet extends ControllerServlet {
 	private static final long serialVersionUID = -6122606456722720455L;
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setHeader("Cache-Control", "no-cache");
 		try {
 			User user = getUser(request);
 			if (user == User.GUEST) {
@@ -37,12 +38,12 @@ public class PrefsControllerServlet extends ControllerServlet {
 					if (!fileItem.isFormField()) {
 						String fn = fileItem.getFieldName();
 						if ("css".equals(fn) || "xsl".equals(fn)) {
-							
 							writeFile(getServletContext().getRealPath("/custom/"+user.getUsername()+"."+fn), fileItem.getInputStream());
 						}
 					}
 				}
 			}
+			//frwd(request, response, "/");
 		} catch (FileUploadException e) {
 			internalError(request, response, e);
 		}

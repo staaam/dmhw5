@@ -21,6 +21,7 @@ public class SharedSearchControllerServlet extends ControllerServlet {
 	private static final long serialVersionUID = 5292911530212301687L;
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setHeader("Cache-Control", "no-cache");
 		try {
 			if (!Utils.isNullOrEmpty(request.getParameter("getendpoints"))) {
 				RegistrationServiceService rss = new RegistrationServiceServiceLocator();
@@ -44,7 +45,7 @@ public class SharedSearchControllerServlet extends ControllerServlet {
 			response.setContentType("text/xml");
 		    PrintWriter out = response.getWriter();
 		    out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-		    out.println("<?xml-stylesheet type=\"text/xsl\" href=\"messages.xsl\"?>");
+		    out.println("<?xml-stylesheet type=\"text/xsl\" href=\"boardview?xsl=1\"?>");
 		    out.println("<messages>");
 		    int i=1;
 			for (String endpoint : endpoints) {
