@@ -2,7 +2,7 @@
 
   <!-- Services from MBSearchImplService WSDL service -->
 
-  <service name="MBSearchImpl" provider="java:RPC" style="wrapped" use="literal">
+  <service name="MBSearchImpl" provider="java:RPC" style="wrapped" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" use="encoded">
       <parameter name="wsdlTargetNamespace" value="http://search.dmhw"/>
       <parameter name="wsdlServiceElement" value="MBSearchImplService"/>
       <parameter name="schemaQualified" value="http://search.dmhw"/>

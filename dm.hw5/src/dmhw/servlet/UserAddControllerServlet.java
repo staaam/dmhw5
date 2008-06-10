@@ -17,7 +17,7 @@ public class UserAddControllerServlet extends ControllerServlet {
 			String password = request.getParameter("password");
 			String type = request.getParameter("type");
 			Integer rank = Utils.toInteger(request.getParameter("rank"));
-			boolean guest = Utils.isNullOrEmpty(request.getParameter("full_access"));
+			boolean guest = Utils.isNullOrEmpty(request.getParameter("fullAccess"));
 	
 			if (Utils.isNullOrEmpty(username)) {
 				simpleErrRespone(response, "Username should not be empty");

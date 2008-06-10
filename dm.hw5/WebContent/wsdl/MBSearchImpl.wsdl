@@ -1,37 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions targetNamespace="http://search.dmhw" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://search.dmhw" xmlns:intf="http://search.dmhw" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<wsdl:definitions targetNamespace="http://search.dmhw" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://search.dmhw" xmlns:intf="http://search.dmhw" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 <!--WSDL created by Apache Axis version: 1.4
 Built on Apr 22, 2006 (06:55:48 PDT)-->
  <wsdl:types>
   <schema elementFormDefault="qualified" targetNamespace="http://search.dmhw" xmlns="http://www.w3.org/2001/XMLSchema">
-   <element name="search">
-    <complexType>
-     <sequence>
-      <element maxOccurs="unbounded" name="keywords" type="xsd:string"/>
-      <element name="rank" type="xsd:int"/>
-      <element name="time" type="xsd:long"/>
-     </sequence>
-    </complexType>
-   </element>
-   <element name="searchResponse">
-    <complexType>
-     <sequence>
-      <element maxOccurs="unbounded" name="searchReturn" type="xsd:string"/>
-     </sequence>
-    </complexType>
-   </element>
+   <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+   <complexType name="ArrayOf_xsd_string">
+    <complexContent>
+     <restriction base="soapenc:Array">
+      <attribute ref="soapenc:arrayType" wsdl:arrayType="xsd:string[]"/>
+     </restriction>
+    </complexContent>
+   </complexType>
   </schema>
  </wsdl:types>
 
    <wsdl:message name="searchRequest">
 
-      <wsdl:part element="impl:search" name="parameters"/>
+      <wsdl:part name="keywords" type="impl:ArrayOf_xsd_string"/>
+
+      <wsdl:part name="rank" type="xsd:int"/>
+
+      <wsdl:part name="time" type="xsd:long"/>
 
    </wsdl:message>
 
    <wsdl:message name="searchResponse">
 
-      <wsdl:part element="impl:searchResponse" name="parameters"/>
+      <wsdl:part name="searchReturn" type="impl:ArrayOf_xsd_string"/>
 
    </wsdl:message>
 
@@ -57,13 +53,13 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
          <wsdl:input name="searchRequest">
 
-            <wsdlsoap:body use="literal"/>
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" use="encoded"/>
 
          </wsdl:input>
 
          <wsdl:output name="searchResponse">
 
-            <wsdlsoap:body use="literal"/>
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" use="encoded"/>
 
          </wsdl:output>
 
