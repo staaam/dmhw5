@@ -22,6 +22,12 @@ public class BoardViewControllerServlet extends ControllerServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			User user = getUser(request);
+			if (!Utils.isNullOrEmpty(request.getParameter("xsl"))) {
+				String fn = getUserXSL(user, getServletContext());
+		        RequestDispatcher requestDispatcher = this.getServletContext().getRequestDispatcher(fn);
+		        requestDispatcher.forward(request, response);
+				return;
+			}
 			
 			ArrayList<Message> messages = null;
 			try {
@@ -46,6 +52,7 @@ public class BoardViewControllerServlet extends ControllerServlet {
 				map.get(t).add(m);
 			}
 		
+		response.setHeader("Cache-Control", "no-cache");
 		response.setContentType("text/xml");
 	    PrintWriter out = response.getWriter();
 	    out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
@@ -65,8 +72,9 @@ public class BoardViewControllerServlet extends ControllerServlet {
 	private static String getUserXSL(User user, ServletContext sc) {
 		String fn = "/custom/"+user.getUsername()+".xsl";
 		File f = new File(sc.getRealPath(fn));
-		if (f.exists())
-			return fn;
-		return "messages.xsl";
+		if (!f.exists())
+			fn = "/messages.xsl";
+		//fn = sc.getContextPath() + fn;
+		return fn;
 	}   	
 }

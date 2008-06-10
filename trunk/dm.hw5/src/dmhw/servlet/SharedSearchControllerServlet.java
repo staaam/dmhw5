@@ -22,7 +22,7 @@ public class SharedSearchControllerServlet extends ControllerServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
-			if (!Utils.isNullOrEmpty("getendpoints")) {
+			if (!Utils.isNullOrEmpty(request.getParameter("getendpoints"))) {
 				RegistrationServiceService rss = new RegistrationServiceServiceLocator();
 				RegistrationService rs = rss.getEndpointsRegistration();
 				String s = ""; 

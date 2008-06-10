@@ -70,13 +70,18 @@ function sharedSearch() {
 	request2('sharedsearch','getendpoints=1','GET', err, function (xml) {
 		var epl = gel('endpointsList');
 		var els = xml.getElementsByTagName('endpoint');
-		var html = "";
 		for (var i=0; i<els.length; i++) {
 			var el = els[i];
 			var ep = el.firstChild.data;
-			html += '<input type="checkbox" name="endpoints" value="'+ep+'" checked="checked"/>'+ep+'<br/>';
+			var input = document.createElement('input');
+			input.type = "checkbox";
+			input.name = "endpoints";
+			input.value = ep;
+			input.checked = "checked";
+			epl.appendChild(input);
+			epl.appendChild(document.createTextNode(ep));
+			epl.appendChild(document.createElement('br'));
 		}
-		gel('endpointsList').innerHTML = html;		
 	});
 	setEl(gel('main'), gel('sharedSearch'));
 }
@@ -104,15 +109,24 @@ function showPrefs() {
 	setEl(gel('main'), gel('prefs'));
 }
 
+function deleteMsg(id, el) {
+// deletemessage?msgid=<xsl:value-of select="id"/>
+	if (!id || !el) return;
+    request2('deletemessage', 'msgid=' + id, 'GET', gel("dummy"), function (xml) {
+			setText(el, 'Deleted');
+    	});
+}
+
 function setPrefs(target) {
 	if (!target) return;
 	
 	AIM.submit(target, {
 		'onStart' : function () {
-			setText(get('uploadStatus'), 'Uploading...');
+			setText(gel('uploadStatus'), 'Uploading...');
+			return true;
 		},
 		'onComplete' : function (response) {
-			setText(get('uploadStatus'), 'Done');
+			setText(gel('uploadStatus'), 'Done');
 		}
 	});	
 }
@@ -134,7 +148,7 @@ function showMessages(target, url, params, method) {
 		xml = x;
 		showBoard(target, xml, xslt);
 	});
-	request('messages.xsl', null, 'GET', function (x) {
+	request('boardview', 'xsl=1', 'GET', function (x) {
 		xslt = x;
 		showBoard(target, xml, xslt);
 	});
@@ -197,7 +211,7 @@ function doRegister(target) {
 function loginUpdate() {
 	var id = 'logged' + (username ? 'in' : 'out');
 	setText(gel("user"), username ? username : "guest");
-	gel('prefs_menu').style.display = username ? 'block' : 'none';
+	gel('prefs_menu').style.display = username ? '' : 'none';
 	setEl(gel('login_status'), gel(id));
 	setText(gel('loginError'), "");
 	boardView();
@@ -214,14 +228,13 @@ function doLogin(target) {
     
     request2('login', allElements(target), 'POST', gel('loginError'),
     	function (xml) {
-			setLogin("true", username);
+			setLogin("true", target.username.value);
     	});
 
     return false;
 }
 
 function setLogin(success, un) {
-		
 	username = success == "true" ? un : "";
 	loginUpdate();
 }

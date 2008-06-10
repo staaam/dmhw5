@@ -56,7 +56,7 @@
 	<tr>
 <!--	<td>Custom CSS</td><td><input name='css' type='file' /></td> -->
 	<td>Custom XSL</td><td><input name='xsl' type='file' /></td>
-	<td colspan="2"><input type='submit' value='Upload' onclick="setPrefs(this); return false"/></td>
+	<td colspan="2"><input type='submit' value='Upload' onclick="return setPrefs(this);"/></td>
 	</tr>
 	</table>
 	</form>
@@ -93,6 +93,7 @@
 	You're logged in as <span id="user">&nbsp;</span>.
 	<a href="#" onclick="doLogout();">Logout</a>
 </div>
+<div id="dummy"></div>
 <div id="newuser">
 <form>
 <table>

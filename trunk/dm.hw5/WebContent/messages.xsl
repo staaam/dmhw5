@@ -22,7 +22,8 @@
               <div class="id">
               	<xsl:element name="a">
               		<xsl:attribute name="class">id</xsl:attribute>
-              		<xsl:attribute name="href">deletemessage?msgid=<xsl:value-of select="id"/></xsl:attribute>
+              		<xsl:attribute name="href">#</xsl:attribute>
+              		<xsl:attribute name="onclick">deleteMsg(<xsl:value-of select="id"/>, this);</xsl:attribute>
               		Delete
              	</xsl:element>
                </div>
