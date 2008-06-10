@@ -12,6 +12,7 @@ public class DeleteMessageControllerServlet extends ControllerServlet {
 	private static final long serialVersionUID = 4885316149052515878L;
  	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setHeader("Cache-Control", "no-cache");
 		try {
 			User user = getUser(request);
 			if (user.isGuest()) {
@@ -24,12 +25,15 @@ public class DeleteMessageControllerServlet extends ControllerServlet {
 			Message message = MessageManager.getMessage(msgid);
 			if (message == null) {
 				simpleErrRespone(response, "Specified message already not exists");
+				return;
 			}
 			if (message.getRank() > user.getRank()) {
 				simpleErrRespone(response, "Your rank is not enough to delete this message");
+				return;
 			}
 			if (!message.getAuthor().equals(user.getUsername())) {
 				simpleErrRespone(response, "You didn't wrote this message");
+				return;
 			}
 			MessageManager.deleteMessage(msgid);
 			simpleOkRespone(response, "The message was deleted successfully");

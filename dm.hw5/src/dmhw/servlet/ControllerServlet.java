@@ -36,6 +36,12 @@ abstract public class ControllerServlet extends javax.servlet.http.HttpServlet i
 		}
 	}
 
+	protected void frwd(HttpServletRequest request, HttpServletResponse response,
+			String fn) throws ServletException, IOException {
+        RequestDispatcher requestDispatcher = this.getServletContext().getRequestDispatcher(fn);
+        requestDispatcher.forward(request, response);
+	}
+
 	protected void internalError(HttpServletRequest request,HttpServletResponse response, Exception e) {
 		e.printStackTrace();
 		simpleErrRespone(response, "Error occured while processing request ("+e.getMessage()+")");

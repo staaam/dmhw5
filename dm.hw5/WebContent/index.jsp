@@ -20,6 +20,7 @@
 	</script>
 </head>
 <body onload="init()">
+<div id="loading"><img src="loading_animation.gif"/></div>
 <div id="menu">
 	<a href="#" class="menu_item" onclick="newMessage()">new message</a>
 	<a href="#" class="menu_item" onclick="boardView()">board view</a>
@@ -50,13 +51,13 @@
 	<a href="#" onclick="adminAct('unregister');">UnRegister Service</a><br/>
 </div>
 <div id="prefs">
-	<form enctype='multipart/form-data' action='setprefs' method='post'>
+	<form enctype='multipart/form-data' action='setprefs' method='post' onsubmit='return setPrefs(this);'>
 	<table>
 	<tr><td colspan="2"><div id="uploadStatus"></div></td></tr>
 	<tr>
 <!--	<td>Custom CSS</td><td><input name='css' type='file' /></td> -->
 	<td>Custom XSL</td><td><input name='xsl' type='file' /></td>
-	<td colspan="2"><input type='submit' value='Upload' onclick="return setPrefs(this);"/></td>
+	<td colspan="2"><input type='submit' value='Upload'/></td>
 	</tr>
 	</table>
 	</form>
@@ -93,7 +94,6 @@
 	You're logged in as <span id="user">&nbsp;</span>.
 	<a href="#" onclick="doLogout();">Logout</a>
 </div>
-<div id="dummy"></div>
 <div id="newuser">
 <form>
 <table>
@@ -218,6 +218,10 @@
 </table>
 <input type="submit" value="Search" onclick="doSharedSearch(this.form); return false"/>
 </form>
+</div>
+<div id="deleteStatus" class="error"></div>
+<div id="delete_ok">
+	Selected message has been deleted
 </div>
 <div id="post_ok">
 	Your message has been posted successfully

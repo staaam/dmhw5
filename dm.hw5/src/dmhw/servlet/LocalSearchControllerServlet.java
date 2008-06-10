@@ -16,6 +16,7 @@ public class LocalSearchControllerServlet extends ControllerServlet {
 	private static final long serialVersionUID = 5292911530212301687L;
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setHeader("Cache-Control", "no-cache");
 		try {
 			User user = getUser(request);
 			

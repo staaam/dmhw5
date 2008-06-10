@@ -18,14 +18,14 @@ import dmhw.model.*;
 
 public class BoardViewControllerServlet extends ControllerServlet {
 	private static final long serialVersionUID = 4885316149052515878L;
- 	
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setHeader("Cache-Control", "no-cache");
 		try {
 			User user = getUser(request);
 			if (!Utils.isNullOrEmpty(request.getParameter("xsl"))) {
 				String fn = getUserXSL(user, getServletContext());
-		        RequestDispatcher requestDispatcher = this.getServletContext().getRequestDispatcher(fn);
-		        requestDispatcher.forward(request, response);
+				frwd(request, response, fn);
 				return;
 			}
 			
@@ -52,11 +52,10 @@ public class BoardViewControllerServlet extends ControllerServlet {
 				map.get(t).add(m);
 			}
 		
-		response.setHeader("Cache-Control", "no-cache");
 		response.setContentType("text/xml");
 	    PrintWriter out = response.getWriter();
 	    out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-	    out.println("<?xml-stylesheet type=\"text/xsl\" href=\""+getUserXSL(user, servletContext)+"\"?>");
+	    out.println("<?xml-stylesheet type=\"text/xsl\" href=\"boardview?xsl=1\"?>");
 	    out.println("<messages>");
 	    for (String t : map.keySet()) {
 			out.println("<message_list>");

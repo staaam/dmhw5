@@ -112,8 +112,15 @@ function showPrefs() {
 function deleteMsg(id, el) {
 // deletemessage?msgid=<xsl:value-of select="id"/>
 	if (!id || !el) return;
-    request2('deletemessage', 'msgid=' + id, 'GET', gel("dummy"), function (xml) {
-			setText(el, 'Deleted');
+	var st = gel('deleteStatus');
+	setText(st, "");
+	setEl(gel('main'), st);
+    request2('deletemessage', 'msgid=' + id, 'GET', st, function (xml) {
+			setEl(gel('main'), gel('delete_ok'));
+			var t = el;
+			while (t && t.className != 'msg')
+				t = t.parentNode;
+			if (t) t.style.display = 'none';
     	});
 }
 
@@ -127,6 +134,7 @@ function setPrefs(target) {
 		},
 		'onComplete' : function (response) {
 			setText(gel('uploadStatus'), 'Done');
+			boardView();
 		}
 	});	
 }
@@ -238,6 +246,8 @@ function setLogin(success, un) {
 	username = success == "true" ? un : "";
 	loginUpdate();
 }
+
+var requests = 0;
 // LOGIN/LOGOUT SECTION END
 function request(url, params, method, callback) {
 	if (params && method == 'GET') {
@@ -249,11 +259,20 @@ function request(url, params, method, callback) {
     var xmlhttp =  new XMLHttpRequest();
     xmlhttp.open(method, url, true);
     
+    gel('loading').style.visibility = 'visible';
     /* The callback function */
     xmlhttp.onreadystatechange = function() {
+    	if (xmlhttp.readyState == 1) {
+    		requests++;
+    	}
         if (xmlhttp.readyState == 4) {
-            if (xmlhttp.status == 200)
+        	requests--;
+        	if (requests == 0)
+        	    gel('loading').style.visibility = 'hidden';
+        	
+            if (xmlhttp.status == 200) {
             	callback(xmlhttp.responseXML);
+            }
         }
     }
     
